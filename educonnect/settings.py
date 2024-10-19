@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-9zhjqt24jnx.ws.codeinstitute-ide.net','.herokuapp.com']
+ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net','.herokuapp.com']
 
 
 # Application definition
@@ -74,12 +74,12 @@ WSGI_APPLICATION = 'educonnect.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
 
 
 # Password validation
