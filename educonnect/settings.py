@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net','.herokuapp.com']
 
@@ -90,6 +90,11 @@ DATABASES = {
     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net/",
+    "https://educonnect-sl-5ffcb9da3e93.herokuapp.com/"
+]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -131,4 +136,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.CustomUser'
