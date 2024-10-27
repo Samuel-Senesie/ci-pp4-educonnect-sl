@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - Educonnect-SL{% endblock %}
+
+{% block content %}
+
+<div class="home-container container mt-4">
+    <!-- Hero section -->
+    <section class="hero-section row justify-content-center">
+        <div class="hero-image-wrapper col-12 col-md-10">
+            <div class="hero-image" style="background-image: url('{% static 'images/pp4-hero-image.jpg' %}');"></div>
+        </div>
+    </section>
+    
+
+    <!-- Welcome Section -->
+    <section class="welcome-section row justify-content-center mt-4">
+        <div class="welcome-content col-12 col-md-10 col-lg-8 text-center p-4 border rounded">
+            <h2 class="welcome-title">Welcome to Educonnect-SL</h2>
+            <p class="welcome-description">Educonnect-SL is a two-way communication platform designed to simplify and enhance the interaction between parents and teachers, ensuring seamless and efficient communication for better student support.</p>
+            <h3 class="features-title">Features</h3>
+            <ul class="features-list list-unstyled">
+                <li class="features-item"><i class="fa fa-comments icon-green"></i>Streamline parent-teacher communication</li>
+                <li class="features-item"><i class="fa fa-calendar-check icon-orange"></i> Attendance and timetable monitoring</li>
+                <li class="features-item"><i class="fa fa-calendar-alt icon-yellow"></i> Schedule appointments with Teachers/school authorities</li>
+                <li class="features-item"><i class="fa fa-bell icon-red"></i>Send emergency alerts to relevant authorities</li>
+            </ul>
+        </div>
+    </section>
+    <!-- Sign-in section -->
+    <section class="sign-in-section row justify-content-center mt-4">
+        <div class="sign-in-wrapper col-12 col-md-10 col-lg-8">
+            <div class="sign-in-box bg-primary text-white text-center p-4 rounded">
+                <h3 class="sign-in-title">Sign In</h3>
+                <form action="{% url 'accounts:login' %}" method="post" class="sign-in-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control sign-in-input" name="username" placeholder="Email/Phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control sign-in-input" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-options d-flex justify-content-between">
+                        <label class="form-check-label text-black">
+                            <input type="checkbox" class="form-check-input text-black">Remember me
+                        </label>
+                        <a href="#" class="forgot-password-link text-white">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-light btn-block sign-in-button">Log In</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+

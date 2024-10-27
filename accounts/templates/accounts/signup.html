@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="signup-container containeer mt-4">
+    <h2 class="signup-title">Sign Up!</h2>
+    <form method="POST" action="{% url 'password_reset' %}" class="signup-form">
+        {% csrf_token %}
+    
+        <div class="signup-form-group">
+            <label><b>{{ form.first_name.label }}</b>{{ form.first_name }}</label>
+        </div>
+        <div class="signup-form-group">
+            <label><b>{{ form.last_name.label }}:</b>{{ form.last_name }}</label>
+        </div>
+        <div class="signup-form-group">
+            <label><b>{{ form.username.label }}:</b>{{ form.username }}</label>
+        </div>
+        <div class="signup-form-group">
+            <label><b>{{ form.email_or_phone.label }}</b>{{ form.email_or_phone }}</label>
+        </div>
+    
+    
+        <!-- Date of birth field with date picker-->
+        <div class="signup-form-group">
+            <label><b>{{ form.date_of_birth.label }}</b>{{ form.date_of_birth }}</label>
+        </div>
+        <div class="signup-form-group">
+            <label><b>{{ form.gender.label }}</b>{{ form.gender }}</label>
+        </div>
+        <div class="signup-form-group">
+            <label><b>{{ form.user_role.label }}</b>{{ form.user_role }}</label>
+        </div>
+    
+    
+        <!-- Preferred means of communication with icons and radio buttons-->
+        <div class="signup-form-group">
+            <label for="prefered_means_of_communication"><b>{{ form.preferred_means_of_communication.label }}</b></label>
+            <div class=" communication-options">
+                {% for radio in form.preferred_means_of_communication %}
+                    <label for="{{ radio.id_for_label}}" class="communication-option">
+                        <!--<input type="radio" name="preferred_means_of_communication" value="{{ radiio.data}}"
+                        {% if radio.choice_value == form.preferred_means_of_communication %}checked{% endif %}>-->
+                        {{ radio.tag }}
+                        {% if radio.choice_label == 'SMS' %} <i class="fas fa-sms"></i>SMS
+                        {% elif radio.choice_label == 'Email' %} <i class="fas fa-envelope"></i>Email
+                        {% elif radio.choice_label == 'WhatsApp' %} <i class="fab fa-whatsapp"></i>WhatsApp
+                        {% endif %}
+                        </label>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="signup-form-group">
+            <label class="inline-label"><b>Preferred Time:</b></label>
+            <div class="preferred-time-wrapper">
+                <div>From: {{ form.preferred_time_from }}</div>
+                <div>To: {{ form.preferred_time_to }}</div>
+            </div>
+        </div>
+        <div class="signup-form-group">
+            <label for="id_password1"><b>{{ form.password1.label }}:</b></label>
+            <div class="password-wrapper">
+                {{ form.password1 }}
+                <span class="toggle-password" onclick="togglePasswordVisibility('id_password1')">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
+            <div id="password_suggestion" class="password-sugesstion" style="display: none;"></div>
+            <div id="password_strength" class="password_strength"></div>
+        </div>
+        <div class="signup-form-group">
+            <label for="id_password2"><b>{{ form.password2.label }}:</b></label>
+            <div class="password-wrapper">
+                {{ form.password2 }}
+                <span class="toggle-password" onclick="togglePasswordVisibility('id_password2')">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>    
+        </div>
+        <div class="signup-form-group">
+            <label for="terms">
+                <input type="checkbox" id="terms" name="terms" required>
+                I agree to the <a href="{% url 'accounts:terms_conditions' %}" target="_blank">Terms and Conditions</a>.
+            </label>
+        </div>
+    
+        <button type="submit" class="signup-submit-btn" id="signup-submit">Sign Up</button>
+    </form>
+    
+    <p class="already-have-account">Already have an account? <a href="{% url 'password_reset' %}">Login here</a>.</p>
+</div>
+
+{% endblock %}

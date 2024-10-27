@@ -11,7 +11,7 @@ class CustomUserManager(BaseUserManager):
     """
     Custom user manager to handle creating regular users and superusers.
     """
-    def create_user(self, email_or_phone, password=None, **extra_fields):
+    def create_user(self, email_or_phone, username=None, password=None, **extra_fields):
         if not email_or_phone:
             raise ValueError(_('Please enter a valid email or phone number to proceed.'))
         if not extra_fields.get('first_name'):
@@ -122,12 +122,12 @@ class UserProfile(models.Model):
     profile_id = models.AutoField(primary_key=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     bio = models.TextField(_('bio'), max_length=500, blank=True, null=True)
-    profile_picture = models.ImageField(_('profile picture'), upload_to='profile_pics/', blank=True, null=True)
+    profile_picture = models.ImageField(_('profile picture'), default='default.jpeg', upload_to='profile_pics/', blank=True, null=True)
     location = models.CharField(_('location'), max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user.get_full_name() or self.user.username
+        return f'{self.user.get_full_name() or self.user.username} - {self.location or "Location not provided"} (UserProfile)'
     
    
     class Meta:
