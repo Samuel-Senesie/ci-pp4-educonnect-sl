@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net','.herokuapp.com']
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -143,6 +144,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 SESSIONS_ENGINE = 'django.contrib.session.backends.db'
 
