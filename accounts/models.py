@@ -19,33 +19,49 @@ class CustomUserManager(BaseUserManager):
         if not extra_fields.get('last_name'):
             raise ValueError(_('Last name is required.'))
 
-        if not extra_fields.get('is_superuser') and 'date_of_birth' not in extra_fields:
-            raise ValueError(_('Date of birth is required.'))
+        #if not extra_fields.get('is_superuser') and 'date_of_birth' not in extra_fields:
+            #raise ValueError(_('Date of birth is required.'))
+        #if not extra_fields.get('is_superuser'):
+            #date_of_birth = extra_fields.get('date_of_birth')
+            #if date_of_birth is None:
+            #    raise ValueError(_("Date of birth is required for all regular users."))
+        #else:
+            #extra_fields.pop('date_of_birth', None)
         
+        #  Ensure date of birth is provided by regular users but not for superuser
         date_of_birth = extra_fields.pop('date_of_birth', None)
+        if not extra_fields.get('is_superuser') and date_of_birth is None:
+            raise ValueError(_("Date of birth is required for all regular users."))
+
         email_or_phone = self.normalize_email(email_or_phone)
-        user = self.model(email_or_phone=email_or_phone, date_of_birth=date_of_birth, **extra_fields)
+        extra_fields.setdefault('is_active', True)
+        #user = self.model(email_or_phone=email_or_phone, date_of_birth=date_of_birth, **extra_fields)
+        user = self.model(email_or_phone=email_or_phone, date_of_birth=date_of_birth, username=username, **extra_fields)
         user.set_password(password) #  Hash password
         user.save(using=self._db)
         return user
 
     def create_superuser(self, username, email_or_phone, password, **extra_fields):
         """
-        Create and return Superuser.
-        Superuser requires an email, username, and password.
+        Create and return Superuser.Superuser requires an email, username, and password.
         """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('date_of_birth', None)
+        #extra_fields.setdefault('date_of_birth', None)
 
-        if not username:
-            raise ValueError('Superuser must have a username')
-        if not password:
-            raise ValueError('Superuser must have a password.')
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
+        
+        if not username:
+            raise ValueError('Superuser must have a username')
+        if not password:
+            raise ValueError('Superuser must have a password.')
+        
+        # Make date of birth not required for superuser
+        extra_fields.pop('date_of_birth', None)  
+        # = extra_field.get('date_of_birth',None)
     
         return self.create_user(email_or_phone=email_or_phone, username=username, password=password, **extra_fields)
     
@@ -73,9 +89,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ]
     
     COMMUNICATION_PREFERENCE = [
-        ('SMS', 'SMS'),
-        ('WhatsApp', 'WhatsApp'),
-        ('Email', 'Email'),
+        ('sms', 'SMS'),
+        ('email', 'Email'),
+        ('whatsapp', 'WhatsApp'),
     ]
 
 
@@ -83,17 +99,30 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_role = models.CharField(_('user role'), max_length=50, choices=USER_ROLES)
     first_name = models.CharField(_('first name'), max_length=50)
     last_name = models.CharField(_('last name'), max_length=50)
-    email_or_phone = models.CharField(_('email or phone'), max_length=255, unique=True, validators=[EmailValidator(_('Enter a valid email address.'), code='invalid_email'), RegexValidator(r'^\+?1?\d{9,15}$', _('Enter a valid phone number.'), code='invalid_phone')])
-    date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
+    email_or_phone = models.CharField(
+        _('email or phone'), 
+        max_length=255, 
+        unique=True, 
+        #validators=[
+            #EmailValidator(_('Enter a valid email address.'), code='invalid_email'), 
+            #RegexValidator(r'^\+?1?\d{9,15}$', _('Enter a valid phone number.'), code='invalid_phone')
+        #]
+    )
+    date_of_birth = models.DateField(_('date of birth'), null=True, blank=True) # default='2000-01-01'
     gender = models.CharField(_('gender'), max_length=10, choices=GENDER_CHOICES)
     #location = models.ForeignKey('Location', no_delete=models.SET_NULL, null=True)
-    preferred_means_of_communication = models.CharField(_('preferred means of communication'), max_length=20, choices=COMMUNICATION_PREFERENCE, default='SMS')
+    preferred_means_of_communication = models.CharField(
+        _('preferred means of communication'), 
+        max_length=20, 
+        choices=COMMUNICATION_PREFERENCE, 
+        default='sms'
+    )
     preferred_time_from = models.TimeField(_('preferred time from'), null=True, blank=True)
     preferred_time_to = models.TimeField(_('preferred time to'), null=True, blank=True)
     is_verified = models.BooleanField(_('is verified'), default=False)
     verification_code = models.CharField(max_length=10, blank=True, null=True)
     is_active = models.BooleanField(_('active'), default=True, help_text=_('Indicates if user account is active.'))
-    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designate whether the user can log into this admin site.'))
+    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
     is_superuser = models.BooleanField(_('superuser status'), default=False, help_text=_('Designate that this user has all the permisions without explicity assigning them.'))
     last_login = models.DateTimeField(_('last login'), null=True, blank=True)
     created_at = models.DateTimeField(_('created at'), default=timezone.now, editable=False)
@@ -102,7 +131,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email_or_phone'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
 
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'.strip()

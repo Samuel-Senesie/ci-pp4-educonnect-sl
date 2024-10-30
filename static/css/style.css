@@ -271,42 +271,11 @@ body {
     margin-top: 5px;
 }
 
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
 .signup-form-group input[type="password"] {
     width: 100%;
     padding-right: 30px;
 }
 
-
-.toggle-password {
-    position: absolute;
-    right: 10px;
-    transform: translate(-50%);
-    color: #999;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    height: 100%;
-}
-
-.password-suggestion {
-    margin-top: 5px;
-    font-size: 0,9em;
-    color: #666;
-    cursor: pointer;
-    padding: 5px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-}
-
-.password-suggestion:hover {
-    background-color: #f0f0f0;
-}
 
 .toggle-password:hover {
     color: #555;
@@ -315,20 +284,56 @@ body {
 .password_strength {
     font-size: 0.9em;
     margin-top: 5px;
-    color: #888;
+    font-weight: bold;
 }
 
-.password-strength.weak {
+.password_strength.weak {
     color: red;
 }
 
-.password-strength.medium {
+.password_strength.medium {
     color: orange;
 }
 
-.password-strength.strong {
-    color: green !important;
+.password_strength.strong {
+    color: green;
 }
+
+.input-error {
+    border-color: 2px solid red !important;
+}
+
+.password-suggestion {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #666;
+    padding: 5px;
+    border: 1px solid #ddd;
+    background-color: #9a2525;
+    cursor: pointer;
+    display: none;
+}
+
+.password-suggestion:hover {
+    background-color: #f0f0f0;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    color: #999;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+
 
 /* Terms and Conditions Page */
 .terms-container {
@@ -383,18 +388,35 @@ body {
 
 
 /** Signup review page **/
+.signup-review-container {
+    max-width: 43.75rem;
+    margin: 1.25rem auto;
+    padding: 1.25rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+.signup-review-title {
+    text-align: center;
+    font-size: 1,5rem;
+    color: #003366;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
 .signup-review-table {
     width: 100%;
-    max-width: 600px;
-    margin: auto;
     border-collapse: collapse;
-    border-spacing: 0;
+    margin-bottom: 1.25rem;
 }
 
 .signup-review-table td {
-    padding: 8px 12px;
+    padding: 10px;
     border: 1px solid #ddd;
     vertical-align: top;
+    font-size: 1rem;
 }
 
 .signup-review-table tr:nth-child(even) {
@@ -404,39 +426,71 @@ body {
 .signup-review-table td:first-child {
     font-weight: bold;
     color: #333;
-    width: 30%;
+    width: 40%;
 }
 
 /* Signup review button */
 .sign-up-review-button-container {
     display: flex;
     justify-content: space-between;
-    max-width: 600px;
-    margin: 20px auto;
+    margin-top: 1.5rem;
+    
 }
- .confirm-button {
+ .signup-confirm-btn,
+ .signup-edit-btn {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.signup-confirm-btn {
     background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
- }
-
-.edit-btn {
-    background-color: #f44336;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
+    align-self: flex-end;
 }
 
-.confirm-btn:hover, 
-.edit-btn:hover {
+.signup-edit-btn {
+    background-color: #f44336;
+    align-self: flex-start;
+}
+
+.signup-confirm-btn:hover {
+    background-color: #45a049;
     opacity: 0.9;
+
+}
+
+.signup-edit-btn:hover {
+    background-color: #e53935;
+    opacity: 0.9;
+}
+
+.or-divider {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.create-account-button {
+    display: inline-block;
+    width: 100%;
+    padding: 0.63rem;
+    background-color: #002244;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.create-account-button:hover {
+    background-color: #218838;
 }
 
 /* Footer section */
@@ -467,6 +521,14 @@ body {
 
     .signup-container {
         padding: 30px;
+    }
+
+    .signup-review-title {
+        font-size: 1.75rem;
+    }
+
+    .signup-review-table td {
+        font-size: 1.125rem;
     }
 }
 
@@ -506,10 +568,26 @@ body {
     .terms-subtitle {
         font-size: 1,25rem;
     }
+
+    .signup-review-container {
+        padding: 1.9rem;
+    }
+
+    .signup-review-title {
+        font-size: 1.9rem;
+    }
+
+    .signup-review-table td {
+        font-size: 1.25rem;
+    }
 }
 
 @media (min-width: 1024px) {
     .hero-image {
         height: 400px;
+    }
+
+    .signup-review-container {
+        max-width: 50rem;
     }
 }

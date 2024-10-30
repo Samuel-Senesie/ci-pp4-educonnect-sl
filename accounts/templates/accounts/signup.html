@@ -6,32 +6,35 @@
 
 <div class="signup-container containeer mt-4">
     <h2 class="signup-title">Sign Up!</h2>
-    <form method="POST" action="{% url 'password_reset' %}" class="signup-form">
+    <form method="POST" action="{% url 'accounts:signup' %}" class="signup-form">
         {% csrf_token %}
     
         <div class="signup-form-group">
-            <label><b>{{ form.first_name.label }}</b>{{ form.first_name }}</label>
+            <label for="first_name"><b>{{ form.first_name.label }}</b></label>
+            {{ form.first_name }}
         </div>
         <div class="signup-form-group">
-            <label><b>{{ form.last_name.label }}:</b>{{ form.last_name }}</label>
+            <label for="last_name"><b>{{ form.last_name.label }}:</b></label>
+            {{ form.last_name }}
         </div>
         <div class="signup-form-group">
-            <label><b>{{ form.username.label }}:</b>{{ form.username }}</label>
+            <label or="username"><b>{{ form.username.label }}:</b></label>
+            {{ form.username }}
         </div>
         <div class="signup-form-group">
-            <label><b>{{ form.email_or_phone.label }}</b>{{ form.email_or_phone }}</label>
+            <label or="email_or_phone"><b>{{ form.email_or_phone.label }}</b></label>{{ form.email_or_phone }}
         </div>
     
     
         <!-- Date of birth field with date picker-->
         <div class="signup-form-group">
-            <label><b>{{ form.date_of_birth.label }}</b>{{ form.date_of_birth }}</label>
+            <label for="email_or_phone"><b>{{ form.date_of_birth.label }}</b></label>{{ form.date_of_birth }}
         </div>
         <div class="signup-form-group">
-            <label><b>{{ form.gender.label }}</b>{{ form.gender }}</label>
+            <label for="gender"><b>{{ form.gender.label }}</b></label>{{ form.gender }}
         </div>
         <div class="signup-form-group">
-            <label><b>{{ form.user_role.label }}</b>{{ form.user_role }}</label>
+            <label for="user_role"><b>{{ form.user_role.label }}</b></label>{{ form.user_role }}
         </div>
     
     
@@ -41,8 +44,6 @@
             <div class=" communication-options">
                 {% for radio in form.preferred_means_of_communication %}
                     <label for="{{ radio.id_for_label}}" class="communication-option">
-                        <!--<input type="radio" name="preferred_means_of_communication" value="{{ radiio.data}}"
-                        {% if radio.choice_value == form.preferred_means_of_communication %}checked{% endif %}>-->
                         {{ radio.tag }}
                         {% if radio.choice_label == 'SMS' %} <i class="fas fa-sms"></i>SMS
                         {% elif radio.choice_label == 'Email' %} <i class="fas fa-envelope"></i>Email
@@ -80,16 +81,16 @@
             </div>    
         </div>
         <div class="signup-form-group">
-            <label for="terms">
-                <input type="checkbox" id="terms" name="terms" required>
-                I agree to the <a href="{% url 'accounts:terms_conditions' %}" target="_blank">Terms and Conditions</a>.
+            <label for="accept_terms">
+                <!--<input type="checkbox" id="terms" name="terms" required> -->
+                {{ form.accept_terms }} I agree to the <a href="{% url 'accounts:terms_conditions' %}" target="_blank">Terms and Conditions</a>.
             </label>
         </div>
     
         <button type="submit" class="signup-submit-btn" id="signup-submit">Sign Up</button>
     </form>
     
-    <p class="already-have-account">Already have an account? <a href="{% url 'password_reset' %}">Login here</a>.</p>
+    <p class="already-have-account">Already have an account? <a href="{% url 'home' %}#login-section">Login here</a>.</p>
 </div>
 
 {% endblock %}

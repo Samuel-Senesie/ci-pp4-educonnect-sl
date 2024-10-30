@@ -4,52 +4,68 @@
 
 {% block content %}
 
-<h2>Review Your Information</h2>
-<form method="POST" action="{% url 'submit_signup %}">
-    {% csrf_token %}
-    <table class = "signup-review-table">
-        <tr>
-            <td><b>First Name:</b></td>
-            <td>{{ signup_data.first_name }}</td>
-        </tr>
-        <tr>
-            <td><b>Last Name:</b></td>
-            <td>{{ signup_data.last_name }}</td>
-        </tr>
-        <tr>
-            <td><b>Username:</b></td>
-            <td>{{ signup_data.username }}</td>
-        </tr>
-        <tr>
-            <td><b>Email/Phone:</b></td>
-            <td>{{ signup_data.email_or_phone }}</td>
-        </tr>
-        <tr>
-            <td><b>Date of Birth:</b></td>
-            <td>{{ signup_data.date_of_birth }}</td>
-        </tr>
-        <tr>
-            <td><b>Gender:</b></td>
-            <td>{{ signup_data.gender }}</td>
-        </tr>
-        </tr>
-            <td><b>User Role:</b></td>
-            <td>{{ signup_data.user_role }}</td>
-        </tr>
-        </tr>
-            <td><b>Preferred Means of Communication:</b></td>
-            <td>{{ signup_data.prefered_means_of_communication }}</td>
-        </tr>
-        </tr>
-            <td><b>Preferred Time:</b></td>
-            <td>{{ signup_data.preferred_time_from }} to {{ signup_data.preferred_time_to }}</td>
-        </tr>
-    </table>
-    <div class="signup-review-button-container">
-        <button type="submit" class="btn btn-primary confirm-btn">Confirm</button>
-        <a href="{% url 'signup' %}" class="btn btn-secondary edit-btn">Edit Entries</a>
-    </div>
-</form>
+<div class="signup-review-container">
+    <h2 class="signup-review-title">Review Your Information</h2>
+    <form method="POST" action="{% url 'accounts:signup_review' %}">
+        {% csrf_token %}
+        <table class="signup-review-table">
+            <tr>
+                <td><b>First Name:</b></td>
+                <td>{{ signup_data.first_name }}</td>
+            </tr>
+            <tr>
+                <td><b>Last Name:</b></td>
+                <td>{{ signup_data.last_name }}</td>
+            </tr>
+            <tr>
+                <td><b>Username:</b></td>
+                <td>{{ signup_data.username }}</td>
+            </tr>
+            <tr>
+                <td><b>Email/Phone:</b></td>
+                <td>{{ signup_data.email_or_phone }}</td>
+            </tr>
+            <tr>
+                <td><b>Date of Birth:</b></td>
+                <td>{{ signup_data.date_of_birth }}</td>
+            </tr>
+            <tr>
+                <td><b>Gender:</b></td>
+                <td>{{ signup_data.gender }}</td>
+            </tr>
+            <tr>
+                <td><b>User Role:</b></td>
+                <td>{{ signup_data.user_role }}</td>
+            </tr>
+            <tr>
+                <td><b>Preferred Means of Communication:</b></td>
+                <td>
+                    {% if signup_data.preferred_means_of_communication == 'sms' %}
+                        SMS
+                    {% elif signup_data.preferred_means_of_communication == 'email' %}
+                        Email
+                    {% elif signup_data.preferred_means_of_communication == 'whatsapp' %}
+                        WhatsApp
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><b>Preferred Time:</b></td>
+                <td>{{ signup_data.preferred_time_from }} to {{ signup_data.preferred_time_to }}</td>
+            </tr>
+            <tr>
+                <td><b>Agreed to Terms:</b></td>
+                <td>{{ signup_data.accept_terms|yesno:"Yes,No" }}</td>
+            </tr>
+        </table>
+        <div class="signup-review-button-container" style="display: flex; justify-content: space-between;">
+            <a href="{% url 'accounts:signup' %}" class="btn btn-secondary signup-edit-btn">Edit Entries</a>
+            <button type="submit" class="btn btn-primary signup-confirm-btn">Confirm</button>
+        </div>
+    </form>
+</div>
+
 
 {% endblock %}
-

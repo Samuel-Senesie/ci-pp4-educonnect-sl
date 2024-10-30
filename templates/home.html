@@ -29,7 +29,7 @@
         </div>
     </section>
     <!-- Sign-in section -->
-    <section class="sign-in-section row justify-content-center mt-4">
+    <section id="login-section" class="sign-in-section row justify-content-center mt-4">
         <div class="sign-in-wrapper col-12 col-md-10 col-lg-8">
             <div class="sign-in-box bg-primary text-white text-center p-4 rounded">
                 <h3 class="sign-in-title">Sign In</h3>
@@ -49,6 +49,8 @@
                     </div>
                     <button type="submit" class="btn btn-light btn-block sign-in-button">Log In</button>
                 </form>
+                <div class="or-divider my-3">OR</div>
+                <a href="{% url 'accounts:signup' %}" class="btn btn-secondary create-account-button"> Create Account</a>
             </div>
         </div>
     </section>
