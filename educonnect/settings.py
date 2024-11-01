@@ -27,7 +27,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates/')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d'
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", 'fallback-defuault-if-not-set')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -161,7 +161,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOCKEN = '46a5ba552acc948e6518a63a3521e492'
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = ""
 
 MESSAGE_TAGS = {
