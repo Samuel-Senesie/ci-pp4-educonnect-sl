@@ -1,28 +1,57 @@
 {% extends 'base.html' %}
 
-{% block title %}Profile - {{profile.user.username}}{% endblock %}
+{% block title %}Profile - {{ profile.user.username|default:"User" }}{% endblock %}
 
 {% block content %}
 {% load static %}
 
-<div class="container">
-    <h1>{{ profile.user.username}} Profile</h1>
-    <div class="row">
-        <div class="col-md-3">
+<div class="user-profile-container">
+    <div class="user-profile-header">
+        <div class="user-profile-picture-wrapper text-center">
             {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url}}" class="img-thumbnail" alt="Profile Picture">
+                <img src="{{ profile.profile_picture.url }}" class="user-profile-picture img-fluid rounded-circle"
+                alt="Profile Picture of {{ profile.user.username }}">
             {% else %}
-                <img src="{% static 'img/default_profile_pic.jpg' %}" class="img-thumbnail" alt=" Default Profile Picture">
+                <img src="{% static 'img/default_profile_pic.jpg' %}" class="user-profile-picture img-fluid rounded-circle"
+                alt="Default Profile Picture">
             {% endif %}
         </div>
-        <div class="col-md-9">
-            <p><strong>Bio:</strong> {{ profile.bio}}</p>
-            <p><strong>Full Name:</strong> {{ user.get_full_name }}</p>
-            <p><strong>Email/Phone:</strong> {{ user.email_or_phone }}</p>
-            <p><strong>Location:</strong> {{ profile.location}}</p>
-            <p><strong>Date of Birth:</strong> {{ profile.date_of_birth}}</p>
+        <div class="user-profile-actions text-center mt-3">
+            <button id="editProfileBtn" class="btn user-profile-action-btn">Edit Profile</button>
+            <a href="{% url 'logout' %}" class="btn user-profile-action-btn">Log Out</a>
+            <button id="deleteProfileBtn" class="btn user-profile-action-btn btn-danger">Delete Profile</button>
         </div>
     </div>
+
+    <div class="user-profile-details mt-4">
+        <ul class="user-profile-details-list">
+            <li><strong>Bio:</strong> {{ profile.bio|default:"N/A" }}</li>
+            <li><strong>Full Name:</strong> {{ profile.user.get_full_name|default:"N/A" }}</li>
+            <li><strong>Email/Phone:</strong> {{ profile.user.email_or_phone|default:"N/A" }}</li>
+            <li><strong>Date of Birth:</strong> {{ profile.date_of_birth|date:"F j, Y"|default:"N/A" }}</li>
+            <li><strong>Location:</strong> {{ profile.location|default:"N/A" }}</li>
+        </ul>
+    </div>
+
+    <!-- Modal for profile editing -->
+    <div id="editProfileModal" class="user-modal">
+        <div class="user-modal-content">
+            <button class="close user-modal-close" aria-label="Close">&times;</button>
+            <form method="POST" action="{% url 'profile_edit' request.user.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-group">
+                    <label for="profilePicture">Upload Profile Picture</label>
+                    <input type="file" id="profilePicture" name="profile_picture" class="form-control"
+                        aria-label="Profile picture upload">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

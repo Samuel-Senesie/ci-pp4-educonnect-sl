@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="parent-portal-container">
+    <h2 class="parent-portal-title">Parent Portal</h2>
+    <div class="parent-portal-grid">
+        <a href="#" class="parent-portal-card parent-add-child">
+            <i class="fa fa-user-plus"></i>
+            <span>Add/Manage Child</span>
+        </a>
+        <a href="#" class="parent-portal-card parent-send-message">
+            <i class="fa fa-paper-plane"></i>
+            <span>Send Message</span>
+        </a>
+        <a href="#" class="parent-portal-card parent-view-message">
+            <i class="fa fa-comment"></i>
+            <span>View Message</span>
+        </a>
+        <a href="#" class="parent-portal-card parent-view-attendance">
+            <i class="fa fa-calendar-check"></i>
+            <span>View Attendance</span>
+        </a>
+        <a href="#" class="parent-portal-card parent-view-timetable">
+            <i class="fa fa-calendar-alt"></i>
+            <span>View Timetable</span>
+        </a>
+        <a href="#" class="parent-portal-card parent-appointments">
+            <i class="fa-solid fa-calendar-plus"></i>
+            <span>Appointments</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

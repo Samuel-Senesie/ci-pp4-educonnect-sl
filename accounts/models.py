@@ -108,6 +108,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             #RegexValidator(r'^\+?1?\d{9,15}$', _('Enter a valid phone number.'), code='invalid_phone')
         #]
     )
+    is_parent = models.BooleanField(default=False)
+    is_school_staff = models.BooleanField(default=False)
     date_of_birth = models.DateField(_('date of birth'), null=True, blank=True) # default='2000-01-01'
     gender = models.CharField(_('gender'), max_length=10, choices=GENDER_CHOICES)
     #location = models.ForeignKey('Location', no_delete=models.SET_NULL, null=True)

@@ -147,39 +147,52 @@ class CustomLoginForm(AuthenticationForm):
     """
     identifier = forms.CharField(
         max_length=255, 
-        label="Username, Email or Phone", 
-        widget=forms.TextInput(attrs={'autocomplete': 'username', 'id': 'identifier'})
+        label="Email or Phone", 
+        widget=forms.TextInput(attrs={'autocomplete': 'username', 'id': 'identifier'}),
+        help_text="Enter your email or phone number."
     )
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}), label=_("Password"))
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}), 
+        label=_("Password"))
+
     remember_me = forms.BooleanField(required=False, widget=forms.CheckboxInput, label=_("Remember Me"))
 
-    def __init__(self, *args, **kwargs):
-        super(CustomLoginForm, self).__init__(*args, **kwargs)
+    #def __init__(self, *args, **kwargs):
+    #    super(CustomLoginForm, self).__init__(*args, **kwargs)
 
-    def clean(self):
-        cleaned_data = super().clean()
-        identifier = cleaned_data.get('identifier')
-        password = cleaned_data.get('password')
+    #def clean(self):
+    #    cleaned_data = super().clean()
+    #    identifier = cleaned_data.get('identifier')
+    #    password = cleaned_data.get('password')
+
+    #    if not identifier or not password:
+    #        raise forms.ValidationError(_("Both identifier and password are required."))
+
+        #  Check id indentifier is emial or phone
+    #    user_model = get_user_model()
+
+    def clean_identifier(self):
+        identifier = self.cleaned_data.get('identifier')
+        password = self.cleaned_data.get('password')
 
         if not identifier or not password:
             raise forms.ValidationError(_("Both identifier and password are required."))
-
-        #  Check id indentifier is emial or phone
         user_model = get_user_model()
+        user = None
 
         try:
             if '@' in identifier:
-                user = user_model.objects.get(email=identifier)
+                user = user_model.objects.get(email_or_phone=identifier)
             else:
-                user =user_model.objects.get(email=identifier)
+                user =user_model.objects.get(email_or_phone=identifier)
         except user_model.DoesNotExist:
             raise forms.ValidationError(_("Invalid credentials. Please try again."))
         
-        user = authenticate(self.request, username=user.username, password=password)
+        #user = authenticate(self.request, username=user.username, password=password)
 
-        if user is None:
-            raise ValidationError(_("Invalid credentials. Please try again."))
-        return cleaned_data
+        #if user is None:
+        #    raise ValidationError(_("Invalid credentials. Please try again."))
+        return self.cleaned_data
     
 
 class UserProfileForm(forms.ModelForm):

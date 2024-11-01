@@ -33,13 +33,24 @@
         <div class="sign-in-wrapper col-12 col-md-10 col-lg-8">
             <div class="sign-in-box bg-primary text-white text-center p-4 rounded">
                 <h3 class="sign-in-title">Sign In</h3>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
                 <form action="{% url 'accounts:login' %}" method="post" class="sign-in-form">
                     {% csrf_token %}
                     <div class="form-group">
-                        <input type="text" class="form-control sign-in-input" name="username" placeholder="Email/Phone number" required>
+                        <input type="text" class="form-control sign-in-input" name="identifier" placeholder="Email/Phone number" required>
+                        {% if form.identifier.errors %}
+                            <div class="text-danger small">{{ form.identifier.errors|join:", " }}</div>
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control sign-in-input" name="password" placeholder="Password" required>
+                        {% if form.password.errors %}
+                            <div class="text-danger small">{{ form.password.errors|join:", " }}</div>
+                        {% endif %}
                     </div>
                     <div class="form-options d-flex justify-content-between">
                         <label class="form-check-label text-black">

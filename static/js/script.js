@@ -164,3 +164,28 @@ document.querySelector("form").addEventListener("submit", function(event) {
     }
 
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const messageElements = document.querySelectorAll(".notification");
+    if (messageElements.length > 0) {
+        messageElements.forEach(function(message) {
+            setTimeout(function() {
+                message.classList.add('fade-out');
+                setTimeout(function() {
+                    message.style.display = 'none'
+                }, 1000);  // Delay removal to allow fade-out effect
+            }, 4000); // Start fade-out after 4 seconds
+        });
+    }
+});
+
+// Modal funtionality for User profile
+const modal = document.getElementById("editProfileModal");
+const editBtn = document.getElementById("editProfileBtn");
+const closeBtn = document.getElementsByClassName("user-modal-close")[0];
+
+editBtn.onclick = () => modal.style.display = "block";
+closeBtn.onclick = () => modal.style.display = "none";
+window.onclick = (event) => {
+    if (event.target === modal) modal.style.display = "home"
+};
