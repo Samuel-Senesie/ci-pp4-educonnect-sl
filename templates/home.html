@@ -40,16 +40,29 @@
                 {% endif %}
                 <form action="{% url 'accounts:login' %}" method="post" class="sign-in-form">
                     {% csrf_token %}
+
+                    <!-- Identifier Field -->
                     <div class="form-group">
+                        <label for="identifier" class="login-label">Email or Phone Number</label>
                         <input type="text" class="form-control sign-in-input" name="identifier" placeholder="Email/Phone number" required>
                         {% if form.identifier.errors %}
                             <div class="text-danger small">{{ form.identifier.errors|join:", " }}</div>
                         {% endif %}
                     </div>
+
+                    <!-- Password Field with Toggle-->
                     <div class="form-group">
-                        <input type="password" class="form-control sign-in-input" name="password" placeholder="Password" required>
+                        <label for="login_password" class="login-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control sign-in-input" id="login_password" name="password" placeholder="Password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text" onclick="togglePasswordVisibility('login_password')">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
                         {% if form.password.errors %}
-                            <div class="text-danger small">{{ form.password.errors|join:", " }}</div>
+                            <div class="text-danger small">{{ form.password.errors|join:", "}}</div>
                         {% endif %}
                     </div>
                     <div class="form-options d-flex justify-content-between">

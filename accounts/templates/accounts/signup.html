@@ -10,19 +10,19 @@
         {% csrf_token %}
     
         <div class="signup-form-group">
-            <label for="first_name"><b>{{ form.first_name.label }}</b></label>
+            <label for="first_name"><b>{{ form.first_name.label }}*</b></label>
             {{ form.first_name }}
         </div>
         <div class="signup-form-group">
-            <label for="last_name"><b>{{ form.last_name.label }}:</b></label>
+            <label for="last_name"><b>{{ form.last_name.label }}*</b></label>
             {{ form.last_name }}
         </div>
         <div class="signup-form-group">
-            <label or="username"><b>{{ form.username.label }}:</b></label>
+            <label or="username"><b>{{ form.username.label }}(Optional)</b></label>
             {{ form.username }}
         </div>
         <div class="signup-form-group">
-            <label or="email_or_phone"><b>{{ form.email_or_phone.label }}</b></label>{{ form.email_or_phone }}
+            <label or="email_or_phone"><b>{{ form.email_or_phone.label }}*</b></label>{{ form.email_or_phone }}
         </div>
     
     
@@ -31,16 +31,16 @@
             <label for="email_or_phone"><b>{{ form.date_of_birth.label }}</b></label>{{ form.date_of_birth }}
         </div>
         <div class="signup-form-group">
-            <label for="gender"><b>{{ form.gender.label }}</b></label>{{ form.gender }}
+            <label for="gender"><b>{{ form.gender.label }}*</b></label>{{ form.gender }}
         </div>
         <div class="signup-form-group">
-            <label for="user_role"><b>{{ form.user_role.label }}</b></label>{{ form.user_role }}
+            <label for="user_role"><b>{{ form.user_role.label }}*</b></label>{{ form.user_role }}
         </div>
     
     
         <!-- Preferred means of communication with icons and radio buttons-->
         <div class="signup-form-group">
-            <label for="prefered_means_of_communication"><b>{{ form.preferred_means_of_communication.label }}</b></label>
+            <label for="prefered_means_of_communication"><b>{{ form.preferred_means_of_communication.label }}(Optional)</b></label>
             <div class=" communication-options">
                 {% for radio in form.preferred_means_of_communication %}
                     <label for="{{ radio.id_for_label}}" class="communication-option">
@@ -54,31 +54,45 @@
             </div>
         </div>
         <div class="signup-form-group">
-            <label class="inline-label"><b>Preferred Time:</b></label>
+            <label class="inline-label"><b>Preferred Time(Optional)</b></label>
             <div class="preferred-time-wrapper">
                 <div>From: {{ form.preferred_time_from }}</div>
                 <div>To: {{ form.preferred_time_to }}</div>
             </div>
         </div>
+
+        <!-- Password Fields with Toggle -->
         <div class="signup-form-group">
-            <label for="id_password1"><b>{{ form.password1.label }}:</b></label>
-            <div class="password-wrapper">
-                {{ form.password1 }}
-                <span class="toggle-password" onclick="togglePasswordVisibility('id_password1')">
-                    <i class="fas fa-eye"></i>
-                </span>
+            <label for="id_password1"><b>{{ form.password1.label }}*</b></label>
+            <div class="input-group">
+                <input type="password" class="form-control sign-in-input" id="id_password1" name="password1" placeholder="Password" required>
+                <div class="input-group-append">
+                    <span class="input-group-text" onclick="togglePasswordVisibility('id_password1')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
             </div>
+            {% if form.password1.errors %}
+                <div class="text-danger small">{{form.password1.errors|join:", "}}</div>
+            {% endif %}
             <div id="password_suggestion" class="password-sugesstion" style="display: none;"></div>
             <div id="password_strength" class="password_strength"></div>
         </div>
+
+        <!-- Confirm Password Field with Toggle -->
         <div class="signup-form-group">
-            <label for="id_password2"><b>{{ form.password2.label }}:</b></label>
-            <div class="password-wrapper">
-                {{ form.password2 }}
-                <span class="toggle-password" onclick="togglePasswordVisibility('id_password2')">
-                    <i class="fas fa-eye"></i>
-                </span>
-            </div>    
+            <label for="id_password2"><b>{{ form.password2.label }}*</b></label>
+            <div class="input-group">
+                <input type="password" class="form-control sign-in-form" id="id_password2" name="password2" placeholder="Confirm Password" required>
+                <div class="input-group-append">
+                    <span class="input-group-text" onclick="togglePasswordVisibility('id_password2')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+            </div> 
+            {% if form.password2.errors %}  
+            <div class="text-danger small">{{ form.password2.erors|join:", "}}</div>
+            {% endif %}
         </div>
         <div class="signup-form-group">
             <label for="accept_terms">

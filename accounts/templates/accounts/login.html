@@ -10,18 +10,39 @@
         <h2 class="login-heading">Login</h2>
         <form method="POST" action="{% url 'accounts:parent_portal' %}" class="login-form">
             {% csrf_token %}
+
+            <!-- Identifier Field -->
             <div class="login-form-group">
-                <label for="id_identifier" class="login-label">Username, Email or Phone:</label>
-                {{ form.identifier|add_class:"login-input" }}
+                <label for="id_identifier" class="login-label">Username, Email or Phone</label>
+                {{ form.identifier|add_class:"form-control login-input" }}
+                {% if form.identifier.errors  %}
+                    <div class="text-danger small">{{ form.identifier.errors|join:", "}}</div>
+                {% endif %}
             </div>
+
+            <!-- Password Field with Toggle -->
             <div class="login-form-group">
-                <label for="id_password" class="login-label">Password:</label>
-                {{ form.password|add_class:"login-input" }}
+                <label for="id_password" class="login-label">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control login-input" id="id_password" name="password" placeholder="Password" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text" onclick="togglePasswordVisibility('id_password')">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+                {% if form.password.errors %}
+                    <div class="text-danger small">{{ form.password.errors|join:", " }}</div>
+                {% endif %}
             </div>
+
+            <!-- Remember me checkbox -->
             <div class="login-form-group login-remember-me">
-                <label for="id_remember_me" class="login-label">Remember Me:</label>
+                <label for="id_remember_me" class="login-label">Remember Me</label>
                 {{ form.remember_me }}
             </div>
+
+            <!-- Submit Button -->
             <div class="login-form-group">
                 <button type="submit" class="login-submit-button">Login</button>
             </div>
@@ -29,6 +50,8 @@
                 <div class="login-error-message">{{ form.non_field_errors }}</div>
             {% endif %}
         </form>
+
+        <!-- Additional quick links -->
         <p class="login-help-text"><a href="{% url 'password_reset' %}">Forgot Password?</a></p>
         <p class="login-help-text">Don't have an account? <a href="{% url 'accounts:signup' %}">Register here</a></p>
     </div>

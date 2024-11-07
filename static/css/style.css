@@ -533,8 +533,9 @@ body {
 .login-heading {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
+    font-size: 2rem;
+    color: #007bff;
+    font-weight: bold;
 }
 
 .login-form-group {
@@ -598,6 +599,24 @@ body {
     text-decoration: underline;
 }
 
+.input-group .form-control {
+    padding-right: 2.5rem;
+}
+
+.input-group .input-group-append .input-group-text {
+    background-color: #e9ecef;
+    border-left: none;
+    cursor: pointer;
+}
+
+.input-group .input-group-text i {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.input-group .input-group-text:hover i {
+    color: #333;
+}
 
 /* Profile Page */
 .user-profile-container {

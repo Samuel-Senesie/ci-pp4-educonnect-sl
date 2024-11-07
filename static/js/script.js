@@ -1,7 +1,14 @@
 // Toggle password visibility
 function togglePasswordVisibility(fieldId) {
     const field = document.getElementById(fieldId);
-    field.type = field.type === "password" ? "text" : "password";
+    const icon = field.nextElementSibling.querySelector('i');
+    if (field.type === "password") {
+        field.type = "text";
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        field.type = "password";
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
 }
 
 // Password strength checker
