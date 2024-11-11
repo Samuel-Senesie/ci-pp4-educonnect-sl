@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="signup-container containeer mt-4">
+<div class="signup-container container mt-4">
     <h2 class="signup-title">Sign Up!</h2>
     <form method="POST" action="{% url 'accounts:signup' %}" class="signup-form">
         {% csrf_token %}
@@ -22,7 +22,7 @@
             {{ form.username }}
         </div>
         <div class="signup-form-group">
-            <label or="email_or_phone"><b>{{ form.email_or_phone.label }}*</b></label>{{ form.email_or_phone }}
+            <label for="email_or_phone"><b>{{ form.email_or_phone.label }}*</b></label>{{ form.email_or_phone }}
         </div>
     
     
@@ -64,8 +64,8 @@
         <!-- Password Fields with Toggle -->
         <div class="signup-form-group">
             <label for="id_password1"><b>{{ form.password1.label }}*</b></label>
-            <div class="input-group">
-                <input type="password" class="form-control sign-in-input" id="id_password1" name="password1" placeholder="Password" required>
+            <div class=" password-wrapper input-group">
+                <input type="password" class="form-control" id="id_password1" name="password1" placeholder="Password" required>
                 <div class="input-group-append">
                     <span class="input-group-text" onclick="togglePasswordVisibility('id_password1')">
                         <i class="fas fa-eye"></i>
@@ -82,8 +82,8 @@
         <!-- Confirm Password Field with Toggle -->
         <div class="signup-form-group">
             <label for="id_password2"><b>{{ form.password2.label }}*</b></label>
-            <div class="input-group">
-                <input type="password" class="form-control sign-in-form" id="id_password2" name="password2" placeholder="Confirm Password" required>
+            <div class="password-wrapper input-group">
+                <input type="password" class="form-control" id="id_password2" name="password2" placeholder="Confirm Password" required>
                 <div class="input-group-append">
                     <span class="input-group-text" onclick="togglePasswordVisibility('id_password2')">
                         <i class="fas fa-eye"></i>
@@ -104,7 +104,7 @@
         <button type="submit" class="signup-submit-btn" id="signup-submit">Sign Up</button>
     </form>
     
-    <p class="already-have-account">Already have an account? <a href="{% url 'home' %}#login-section">Login here</a>.</p>
+    <p class="already-have-account">Already have an account? <a href="{% url 'accounts:login' %}">Login here</a>.</p>
 </div>
 
 {% endblock %}

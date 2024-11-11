@@ -1,24 +1,25 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import parent_portal_view, school_portal_view
+from .views import CustomLoginView, parent_portal_view, school_portal_view
 
 app_name = 'accounts'
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('login/', views.login, name='login'),
-    path('parent-portal/', views.parent_portal_view, name='parent_portal'),
-    path('school-portal/', school_portal_view, name='school_portal'),
-    #path('wlcome', views.welcome_view, name='welcome'),
+    #path('home/', views.home, name='home'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('parent_portal/', parent_portal_view, name='parent_portal'),
+    path('school_portal/', school_portal_view, name='school_portal'),
     path('signup/', views.signup, name='signup'),
     path('signup/review/', views.signup_review, name='signup_review'),
     path('terms-and-conditions/', views.terms_conditions, name='terms_conditions'),
-    path('profile/', views.profile, name='profile'),
+    #path('profile/', views.profile, name='profile'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
+    path('profile/edit/<int:user_id>/', views.edit_profile, name='edit_profile'),
+    
 
     # Password reset URLs
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/', views.password_reset, name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/uibd64/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
@@ -35,7 +36,6 @@ urlpatterns = [
 
     # Account activation and status URLs
     path('account_inactive/', views.account_inactive, name='account_inactive'),
-
-
+    path('accounts/', include('django.contrib.auth.urls'))
     
 ]

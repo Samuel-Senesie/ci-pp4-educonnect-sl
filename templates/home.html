@@ -38,8 +38,9 @@
                         <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
-                <form action="{% url 'accounts:login' %}" method="post" class="sign-in-form">
+                <form action="{% url 'accounts:login' %}" method="POST" class="sign-in-form">
                     {% csrf_token %}
+                    {{ form.as_p }}
 
                     <!-- Identifier Field -->
                     <div class="form-group">

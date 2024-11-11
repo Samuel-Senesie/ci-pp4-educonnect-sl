@@ -24,11 +24,10 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('', views.home, name='home'),  #Root URL
+     path('home/', views.home, name='home'),   # /home URL
     path('contact/', views.contact, name='contact'),
     path('about', views.about, name="about"),
-    #path('', views.welcome_view, name='welcome'),
-    path('accounts/', include('accounts.urls')),
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name="password_reset"),
-    path('accounts_redirect/', RedirectView.as_view(url='/')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    
 ]

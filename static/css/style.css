@@ -318,7 +318,7 @@ body {
     background-color: #f0f0f0;
 }
 
-.password-wrapper {
+/*.password-wrapper {
     position: relative;
     display: flex;
     align-items: center;

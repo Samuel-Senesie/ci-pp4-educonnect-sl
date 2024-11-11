@@ -59,6 +59,11 @@ class CustomUserManager(BaseUserManager):
         if not password:
             raise ValueError('Superuser must have a password.')
         
+        if not extra_fields.get('first_name'):
+            raise ValueError('Superuser must have a first name.')
+        if not extra_fields.get('last_name'):
+            raise ValueError('Superuser must have a first name.')
+        
         # Make date of birth not required for superuser
         extra_fields.pop('date_of_birth', None)  
         # = extra_field.get('date_of_birth',None)
@@ -133,7 +138,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email_or_phone'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     def get_full_name(self):
         return f'{self.first_name} {self.last_name}'.strip()

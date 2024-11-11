@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, UserProfile
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserProfileEditForm
 
 # Register your models here.
 
 # Custom UserAdmin
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
+    form = CustomUserProfileEditForm
     model = CustomUser
 
     # List view in admin

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+
+{% block content %}
+<div class="login-view-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ messag.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="login-form-wrapper">
+        <h2 class="login-heading">Login</h2>
+        <form method="POST" action="{% url 'accounts:login' %}" class="login-form">
+            {% csrf_token %}
+            {{ form.as_p}}
+
+            <!-- Remember me checkbox -->
+            <div class="login-form-group login-remember-me">
+                <label for="id_remember_me" class="login-label">Remember Me</label>
+                {{ form.remember_me }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="login-form-group">
+                <button type="submit" class="login-submit-button">Login</button>
+            </div>
+            {% if form.non_field_errors %}
+                <div class="login-error-message">{{ form.non_field_errors }}</div>
+            {% endif %}
+        </form>
+
+        <!-- Additional quick links -->
+        <p class="login-help-text"><a href="{% url 'accounts:password_reset' %}">Forgot Password?</a></p>
+        <p class="login-help-text">Don't have an account? <a href="{% url 'accounts:signup' %}">Register here</a></p>
+    </div>
+</div>
+{% endblock %}

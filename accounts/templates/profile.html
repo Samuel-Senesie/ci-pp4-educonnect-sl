@@ -18,7 +18,7 @@
         </div>
         <div class="user-profile-actions text-center mt-3">
             <button id="editProfileBtn" class="btn user-profile-action-btn">Edit Profile</button>
-            <a href="{% url 'logout' %}" class="btn user-profile-action-btn">Log Out</a>
+            <a href="{% url 'accounts:logout' %}" class="btn user-profile-action-btn">Log Out</a>
             <button id="deleteProfileBtn" class="btn user-profile-action-btn btn-danger">Delete Profile</button>
         </div>
     </div>
@@ -37,7 +37,7 @@
     <div id="editProfileModal" class="user-modal">
         <div class="user-modal-content">
             <button class="close user-modal-close" aria-label="Close">&times;</button>
-            <form method="POST" action="{% url 'profile_edit' request.user.id %}" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'accounts:edit_profile' request.user.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="form-group">

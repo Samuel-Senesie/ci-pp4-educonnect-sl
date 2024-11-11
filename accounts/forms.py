@@ -29,7 +29,7 @@ class CustomUserCreationForm(UserCreationForm, PasswordValidationMixin):
 
     date_of_birth = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'autocomplete': 'bday', 'id': 'date_of_birth'}),
-        label=_("Date of Birth *"),
+        label=_("Date of Birth"),
         help_text=_("Must be 18 or older."),
         required=True
     )
@@ -126,9 +126,12 @@ class CustomUserCreationForm(UserCreationForm, PasswordValidationMixin):
         #return ''.join(random.choice(characters) for _ in range(length))
 
     
-    
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['bio', 'location', 'profile_picture']    
 
-class CustomUserChangeForm(UserChangeForm):
+class CustomUserProfileEditForm(ProfileEditForm):
     """
     Form for updating an existing user.
     """
@@ -147,9 +150,14 @@ class CustomLoginForm(AuthenticationForm):
     """
     identifier = forms.CharField(
         max_length=255, 
-        label="Email or Phone", 
-        widget=forms.TextInput(attrs={'autocomplete': 'username', 'id': 'identifier'}),
-        help_text="Enter your email or phone number."
+        label="Username, Email, or Phone", 
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Username, Email or Phone',
+            'autocomplete': 'username', 
+            'id': 'id_identifier'
+        }),
+        help_text="Enter your username, email or phone number."
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}), 
@@ -157,42 +165,60 @@ class CustomLoginForm(AuthenticationForm):
 
     remember_me = forms.BooleanField(required=False, widget=forms.CheckboxInput, label=_("Remember Me"))
 
-    #def __init__(self, *args, **kwargs):
-    #    super(CustomLoginForm, self).__init__(*args, **kwargs)
-
-    #def clean(self):
-    #    cleaned_data = super().clean()
-    #    identifier = cleaned_data.get('identifier')
-    #    password = cleaned_data.get('password')
-
-    #    if not identifier or not password:
-    #        raise forms.ValidationError(_("Both identifier and password are required."))
-
-        #  Check id indentifier is emial or phone
-    #    user_model = get_user_model()
-
-    def clean_identifier(self):
+    def clean(self):
         identifier = self.cleaned_data.get('identifier')
         password = self.cleaned_data.get('password')
 
+        print(f"identifier recieved: {identifier}")
+        print(f"password recieved: {password}")
+
         if not identifier or not password:
             raise forms.ValidationError(_("Both identifier and password are required."))
+        
         user_model = get_user_model()
         user = None
 
         try:
-            if '@' in identifier:
+
+            if '@' in identifier:  # Assume email if '@' is present
                 user = user_model.objects.get(email_or_phone=identifier)
-            else:
+
+            elif identifier.isdigit():  # Assume phone number if all digits 
                 user =user_model.objects.get(email_or_phone=identifier)
+            else:
+                user = user_model.objects.get(username=identifier)
+            print(f"User found with identifier {identifier}")
         except user_model.DoesNotExist:
-            raise forms.ValidationError(_("Invalid credentials. Please try again."))
+            print("User does not exist with the given identifier")
+            raise forms.ValidationError(_("Invalid login credentials. Please try again."))
         
+        # Authenticate the found user with the password
+        authenticated_user = authenticate(username=user.username, password=password)
+        if authenticated_user is None:
+            print(f"Authentiction failed for user {user.username} with password {password}")
+            raise forms.ValidationError(_("Invalid login credentials. Please try again"))
+        
+        else:
+            print(f"Authentication successful for user {user.username}")
+
+        #if user is None:
+        #    print(f"Authentication failed")
+        #    raise forms.ValidationError(_("Invalid credentials. Please try again."))
+        
+        #self.cleaned_data['user'] = authenticated_user
+        #return self.cleaned_data
+
+        self.cleaned_data['user'] = authenticated_user
+        return self.cleaned_data
+
         #user = authenticate(self.request, username=user.username, password=password)
 
         #if user is None:
         #    raise ValidationError(_("Invalid credentials. Please try again."))
-        return self.cleaned_data
+        
+        # Store the user in cleaned_data for access in the view
+        #self.cleaned_data['user'] = user
+        r#eturn self.cleaned_data
     
 
 class UserProfileForm(forms.ModelForm):
