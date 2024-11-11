@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<!--{% load crispy_forms_tags %}-->
 {% load custom_filters %}
 
 
@@ -6,19 +7,39 @@
 <div class="login-view-container">
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ messag.tags }}">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
     {% endif %}
     <div class="login-form-wrapper">
         <h2 class="login-heading">Login</h2>
-        <form method="POST" action="{% url 'accounts:login' %}" class="login-form">
+        <form method="POST" action="{% url 'accounts:login_view' %}" class="login-form">
             {% csrf_token %}
-            {{ form.as_p}}
+
+            <div class="login-form-group">
+                <label for="id_identifier">Email or Phone</label>
+                <input type="text" name="identifier" id="id_identifier" class="form-control" placeholder="Email or Phone" required>
+            </div>
+
+            <!-- Password input with toggle -->
+            <div class="login-form-group">
+                <label for="id_password">Password</label>
+                <div class="input-group">
+                    <!--{{ form.password }} -->
+                    <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
+                    <div class="input-group-append" onclick="togglePasswordVisibility('id_password')">
+                        <span class="input-group-text">
+                            <i class="fa fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
             <!-- Remember me checkbox -->
             <div class="login-form-group login-remember-me">
-                <label for="id_remember_me" class="login-label">Remember Me</label>
-                {{ form.remember_me }}
+                <div class="form-check">
+                    <input type="checkbox" name="remember_me" id="id_remember_me" class="form">
+                    <label for="id_remember_me" class="form-check-label">Remember Me</label>
+                </div>
             </div>
 
             <!-- Submit Button -->

@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 
-LOGIN_REDIRECT_URL = '/'
+#LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'accounts:login'
 
 
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'crispy_forms',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -86,6 +88,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 WSGI_APPLICATION = 'educonnect.wsgi.application'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Database

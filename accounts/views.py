@@ -24,7 +24,9 @@ import logging
 from django.middleware.csrf import get_token
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
-
+from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 logger = logging.getLogger(__name__) #Debug
 
@@ -270,58 +272,85 @@ def email_confirm(request):
     #    messages.error(self.request, "There was an error with your login information.")
     #    return super().form_invalid(form)
 
-
+# Custom Login View 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
     form_class = CustomLoginForm
     redirect_authenticated_user = True
 
-    @method_decorator(sensitive_post_parameters('password'))
+    #@method_decorator(sensitive_post_parameters('password'))
     def form_valid(self, form):
-        #user = form.get_user() OLD COMMENT
-        #user = form.cleaned_data.get('user')       OLD
-        #auth_login(self.request, user)      0LD
-        #logger.info(f"User roles: is_parent={getattr(user, 'is_parent', False)}, is_school_staff={getattr(user, 'is_school_staff', False)}")      OLD COMMENT
-        #logger.info(f"User authenticated: {user.username}, User role: {user.user_role}")       OLD
+        print("Is this method being called?")
+        user = form.cleaned_data.get('user')
+        # identifier = form.cleaned_data.get['identifier']
+        # password = form.cleaned_data.get['password']
 
-        #return redirect(self.get_success_url(user))
+        identifier = form.cleaned_data.get('identifier')
+        password = form.cleaned_data.get('password')
 
-        identifier = form.cleaned_data['identifier']
-        password = form.cleaned_data['password']
 
         logger.debug(f"Login attempt with identifier: {identifier}")
 
         # Retrive user based on identier
         try:
             user = CustomUser.objects.get(email_or_phone=identifier)
-            logger.debug(f"User found: {user.username}")
+            logger.debug(f"User found: {user.username} ({user.user_role})")
         except CustomUser.DoesNotExist:
             logger.debug("User not found with the identifier.")
             form.add_error(None, "Invalid login credentials.")
             return self.form_invalid(form)
         
         #Authenticate the user with the retrieved user details
-        authenticated_user = authenticate(self.request, username=user.username, password=password)
+        #authenticated_user = authenticate(self.request, username=user.username, password=password)
+        authenticated_user = self.authenticate_user(user, password)
 
-        if authenticated_user is not None:
+        print("Authenticated User: ", authenticated_user)
+
+        if authenticated_user:
             auth_login(self.request, authenticated_user)
-            logger.debug(f"User authenticated successfully: {authenticated_user.get_username}")
-            messages.success(self.request, 'Login Successfully!')
-
-            # Role-based redirection
-            if authenticated_user.user_role == 'parent':
-                logger.info(f"Redirecting {user.username} to the parent portal")
-                return redirect(reverse('accounts:parent_portal'))
-            elif authenticated_user.user_role == 'school_staff':
-                logger.info(f"Redirecting {user.username} to the school portal")
-                return redirect(reverse('accounts:school_portal'))
-            else:
-                logger.info(f"No specific role matched for {user.username} Redirecting to home.")
-                return redirect(reverse('home'))
+            logger.debug(f"User authenticated successfully: {authenticated_user.username}")
+            messages.success(self.request, 'Login successfully!')
+            print("Should go to redirect method")
+            return self.role_based_redirect(authenticated_user)
         else:
             logger.debug("Authentication failed. Invalid credentials.")
             messages.error(self.request, "Invalid login credentials.")
             return self.form_invalid(form)
+
+    def authenticate_user(self, user, password):
+        return authenticate(self.request, username=user.username, password=password)
+
+    def role_based_redirect(self, user):
+        print("Redirect by user_role: ", user.user_role)
+            # Role-based redirection
+        if user.user_role == 'Parent':
+            logger.info(f"Redirecting {user.username} to the parent portal")
+            return redirect('accounts:parent_portal')
+        elif user.user_role == 'Teacher':
+            logger.info(f"Redirecting {user.username} to the teacher portal")
+            return redirect('accounts:teacher_portal')
+        elif user.user_role == 'Administrator':
+            logger.info(f"Redirecting {user.username} to the administrator portal")
+            return redirec('accounts:administrator_portal')
+        elif user.user_role == 'Police':
+            logger.info(f"Redirecting {user.username} to the police portal")
+            return redirect('accounts:police_portal')
+        elif user.user_role == 'MCA':
+            logger.info(f"Redirecting {user.username} to the MCA portal")
+            return redirect('accounts:mca_portal')
+        else:
+            logger.info(f"No specific role matched for {user.username}. Redirecting to home.")
+            return redirect('home')
+    def form_invalid(self, form):
+        print("Form errors:", form.errors)
+        logger.warning("Form invalid. Login attempt failed due to invalid credentials.")
+        return super().form_invalid(form)
+    #else:
+    #    logger.debug("Authentication failed. Invalid credentials.")
+    #    messages.error(self.request, "Invalid login credentials.")
+    #    return self.form_invalid(form)
+    #def get_success_url(self):
+    #    return reverse('home')
 
 
 # User login view
@@ -430,9 +459,9 @@ def edit_profile(request, user_id):
     return render(request, 'accounts/edit_profile.html', {'form': form})
 
 # Home view
-#@login_required
-#def home(request):
-#    return render(request, 'home/home.html')
+@login_required
+def home(request):
+    return render(request, 'home.html')
 
 # Parent Portal View
 @login_required

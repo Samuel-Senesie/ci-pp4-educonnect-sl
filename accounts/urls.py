@@ -7,13 +7,13 @@ app_name = 'accounts'
 
 urlpatterns = [
     #path('home/', views.home, name='home'),
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('parent_portal/', parent_portal_view, name='parent_portal'),
+    path('login_view/', CustomLoginView.as_view(), name='login_view'),
+    path('parent_portal/', views.parent_portal_view, name='parent_portal'),
     path('school_portal/', school_portal_view, name='school_portal'),
     path('signup/', views.signup, name='signup'),
     path('signup/review/', views.signup_review, name='signup_review'),
     path('terms-and-conditions/', views.terms_conditions, name='terms_conditions'),
-    #path('profile/', views.profile, name='profile'),
+    path('profile/', views.profile, name='profile'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
     path('profile/edit/<int:user_id>/', views.edit_profile, name='edit_profile'),
     
