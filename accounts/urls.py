@@ -1,7 +1,7 @@
 from django.urls import include, path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import CustomLoginView, parent_portal_view, school_portal_view
+from .views import CustomLoginView, parent_portal_view, school_portal_view, custom_logout_view
 
 app_name = 'accounts'
 
@@ -16,6 +16,11 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
     path('profile/edit/<int:user_id>/', views.edit_profile, name='edit_profile'),
+    path('delete_profile/', views.delete_profile, name='delete_profile'),
+    path('delete_account/', views.delete_account, name='delete_account'),
+    path('logout/', custom_logout_view, name='logout'),
+
+
     
 
     # Password reset URLs

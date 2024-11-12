@@ -24,6 +24,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 #LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'accounts:login'
+LOGOUT_REDIRECT_URL = 'home'
 
 
 # Quick-start development settings - unsuitable for production
@@ -34,7 +35,7 @@ SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d
 SECRET_KEY = os.environ.get("SECRET_KEY", 'fallback-defuault-if-not-set')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net','.herokuapp.com']
 

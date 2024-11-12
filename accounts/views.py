@@ -18,7 +18,7 @@ from datetime import date, time, datetime
 from django.views.decorators.csrf import csrf_protect
 from twilio.rest import Client
 from django.contrib.auth.views import LoginView
-from django.contrib.auth import get_user_model
+from django.contrib.auth import logout, get_user_model
 from django.urls import reverse
 import logging 
 from django.middleware.csrf import get_token
@@ -27,6 +27,7 @@ from django.utils.decorators import method_decorator
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from django.shortcuts import redirect
 
 logger = logging.getLogger(__name__) #Debug
 
@@ -184,94 +185,6 @@ def email_confirm(request):
     return render(request, 'accounts/email_confirm.html')
 
 
-#class CustomLoginView(LoginView):
-#    template_name = 'accounts/login.html'
-#    form_class = CustomLoginForm
-#    redirect_authenticated_user = False
-
-    
-#    def form_valid(self, form):
-        # Retrieve the authenticated user from the form's cleaned_data
-#        user = form.get_user()              
-#        auth_login(self.request, user)
-#        messages.success(self.request, 'Login successful!')
-#        logger.debug(f"User Authenticated: {user.username}")
-
-#        redirect_url = self.get_success_url(user)
-#        logger.debug(f"Redirect user to URL: {redirect_url}")
-
-        #return redirect(self.get_success_url(user))
-
-#        return HttpResponseRedirect(redirect_url)
-            
-#    def get_success_url(self, user=None):
-#        #if user is None:
-#        user = user or self.request.user
-#        if user.is_authenticated:
-#            if getattr(user, 'is_parent', False):
-#                logger.debug("Redirecting {user.username} to the school portal.")
-#                return reverse('accounts:parent_portal')
-#            elif getattr(user, 'is_school_staff', False):
-#                logger.debug("Redirecting {user.username} to the school portal.")
-#                return reverse('accounts:school_portal')
-#            else:
-#                logger.debug("No specific role matchedd for user: {}. Redirectin to home.".format(user.username))
-#                return reverse('home')
-#        return reverse('home')
-
-#class CustomLoginView(LoginView):
-#    template_name = 'registration/login.html'
-#    form_class = CustomLoginForm
-#    redirect_authenticated_user = True
-
-#    @method_decorator(sensitive_post_parameters('password'))
-#    def form_valid(self, form):
-        #user = form.get_user()
-#       user = form.cleaned_data.get('user')
-#        auth_login(self.request, user)
-        #logger.info(f"User roles: is_parent={getattr(user, 'is_parent', False)}, is_school_staff={getattr(user, 'is_school_staff', False)}")
-#        logger.info(f"User authenticated: {user.username}, User role: {user.user_role}")
-
-        #return redirect(self.get_success_url(user))
-
-#        if user.user_role == 'Parent':
-#            logger.info(f"Redirecting {user.username} to the parent portal")
-#            return redirect(reverse('accounts:parent_portal'))
-#        elif user.user_role == 'school_staff':
-#            logger.info(f"Redirecting {user.username} to the school portal")
-#            return redirect(reverse('accounts:school_portal'))
-#        else:
-#            logger.info(f"No specific role matched for {user.username} Redirecting to home.")
-#            return redirect(reverse('home'))
-            
-        #messages.success(self.request, 'Login successful!')
-        #logger.debug(f"User authenticated: {user.username}")
-
-        #return redirect(self.get_success_url(user))
-
-    #def get_success_url(self, user=None):
-    #    user = user or self.request.user
-
-    #    logger.debug(f"User roles: is_parent={getattr(user, 'is_parent', False)}, is_school_staff={getattr(user, 'is_school_staff', False)}")
-    #    if user.is_authenticated:
-    #        if getattr(user, 'is_parent', False):
-    #            logger.debug(f"Redirecting {user.username} to the parent portal.")
-    #            return reverse('accounts:parent_portal')
-    #        elif getattr(user, 'is_school_staff', False):
-    #            logger.debug(f"Redirecting {user.username} to the school portal.")
-    #            return reverse('accounts:school_portal')
-
-        #return reverse('home')
-    #        else:
-    #            logger.debug(f"No specific role matched for {user.username}. Redirecting to home.")
-    #            return reverse('home')
-        
-
-    #def form_invalid(self, form):
-    #    logger.debug("Form is valid. Errors: %s", form.errors)
-    #    messages.error(self.request, "There was an error with your login information.")
-    #    return super().form_invalid(form)
-
 # Custom Login View 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
@@ -345,73 +258,13 @@ class CustomLoginView(LoginView):
         print("Form errors:", form.errors)
         logger.warning("Form invalid. Login attempt failed due to invalid credentials.")
         return super().form_invalid(form)
-    #else:
-    #    logger.debug("Authentication failed. Invalid credentials.")
-    #    messages.error(self.request, "Invalid login credentials.")
-    #    return self.form_invalid(form)
-    #def get_success_url(self):
-    #    return reverse('home')
+ 
 
 
-# User login view
-#def login(request):
-#    """
-#    User login view using either email or phone
-#    """
-#    if request.method == 'POST':
-#        form = CustomLoginForm(request, data=request.POST)
-#        logger.debug(f"Form data received: {request.POST}") # Debugging line
-
-        #user = None
-#        if form.is_valid():
-#            logger.debug(f"Identifier: {form.cleaned_data['identifier']}, Password: {form.cleaned_data['password']}")
-#            identifier = form.cleaned_data['identifier']
-#            password = form.cleaned_data['password']
-
-#            try:
-#                user = CustomUser.objects.get(email_or_phone=identifier)
-#            except CustomUser.DoesNotExist:
-#                logger.debug("User not found with identifier")  # Debugging line
-#                user = None
-            
-#            if user:
-            # Attempt to authenticate using custom field 
-#                user = authenticate(request, username=user.username, password=password)
-#                logger.debug (f"Login attempt with identifier: {identifier}") # Debugging line 
-#                if user is not None:
-#                    auth_login(request, user)
-#                    logger.debug(f"User authenticated sucessfully: {user.username}") # Debug
-#                    messages.success(request, 'Login Sussesful!')
-
-                    # Redirect based on the user's role
-#                    if user.is_parent:
-#                        return redirect('accounts:parent_portal')
-#                    elif user.is_school_staff:
-#                        return redirect('accounts:school_portal')
-#                    else:
-#                        return redirect('home')
-                    #return redirect('profile', user_id=user.id)
-                    #return redirect('profile_view', user_id=user.id) # Redirect to home on sucessful login originally redirect('home')
-#                else:
-#                    logger.debug("Authentication failed. Invalid credentials") # Debug
-#                    messages.error(request, "Invalid login credentials. Please try agian.")
-                    #form.add_error(None, "Invalid login credentials")
-#            else: 
-#                messages.error(request, "User not found with provided identifier") # Debugging line
-#       else:
-#            logger.debug(f"Form is in valid. Errors: {form.errors}") # Debug
-#            messages.error(request, "There was an error with your login information.")
-        
-#    else:
-#        form = CustomLoginForm()
-#    return render(request, 'accounts/login.html', {'form': form})    
-    #return redirect('accounts:profile', {'form': form})
-    #return redirect('profile', user_id=user.id)
-
-# COMMENTED OUT TEMPORARILY 
-# View to show a message when verification email is sent 
-#def verification_sent(request):
-#    return render(request, 'accounts/verification_sent.html')
+# Logout view
+def custom_logout_view(request):
+    logout(request)
+    return redirect('home')
 
 # View for mail verification is required
 def verified_email_required(request):
@@ -457,6 +310,14 @@ def edit_profile(request, user_id):
         form = UserProfileForm(instance=user_profile)
     
     return render(request, 'accounts/edit_profile.html', {'form': form})
+
+# Delete profile view
+def delete_profile(request):
+    return render(request, 'accounts/delete_profile.html')
+
+# Delete account view
+def delete_account(request):
+    return render(request, 'accounts/delete_account.html')
 
 # Home view
 @login_required

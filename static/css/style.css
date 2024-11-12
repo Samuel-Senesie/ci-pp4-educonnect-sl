@@ -34,6 +34,157 @@ body {
 .navbar-toggler {
     border-color: #ffffff;
 }
+/* Profile Icone and Dropdown */
+.profile-icon, .navbar-brand img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% !important;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+.profile-dropdown {
+    min-width: 200px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.profile-dropdown .profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50% !important;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 52px solid red;
+}
+
+.profile-dropdown p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+}
+
+.profile-dropdown small {
+    display: block;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.profile-dropdown .dropdown-divider {
+    margin: 20px 0;
+}
+
+.profile-dropdown .dropdown-item {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 5px;
+    text-align: center;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.profile-dropdown .dropdown-item.btn {
+    width: 100%;
+    color: #333;
+    transform: background-color 0.2s;
+}
+
+.profile-dropdown .dropdown-item.view-profile,
+.profile-dropdown .dropdown-item.logout {
+    background-color: #007bff;
+    color: white;
+}
+
+.profile-dropdown .dropdown-item.view-profile:hover,
+.profile-dropdown .dropdown-item.logout:hover {
+    background-color: #0056b3;
+}
+
+
+.profile-dropdown .dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-dropdown .dropdown-item.btn-danger {
+    background-color: #dc3545;
+}
+
+.profile-dropdown .dropdown-item.btn-danger:hover {
+    background-color: #c82333;
+}
+
+#profileDropdown::after {
+    display: none;
+}
+
+/* Style for the login button */
+.nav-login-btn {
+    color: #ffffff !important;
+    background-color: #007bff;
+    padding: 0;
+    border-radius: 4px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    margin: 0;
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #0056b3;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 3px;
+    box-sizing: border-box;
+}
+
+.icon-circle i {
+    color: #ffffff;
+    font-size: 1.2rem;
+    line-height: 1;
+    align-items: center;
+}
+
+.nav-login-btn span {
+    font-size: 0.8rem;
+    color: #ffffff !important;
+    line-height: 1;
+}
+
+.nav-login-btn i {
+    margin-right: 2px;
+    font-size: 1.5rem;
+}
+
+.nav-login-btn span {
+    font-size: 1rem;
+}
+
+.nav-login-btn:hover .icon-circle{
+    background-color: #0a2e53;
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 
 /* Home page */
 .home-container {
