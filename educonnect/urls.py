@@ -29,5 +29,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('about', views.about, name="about"),
     path('accounts/', include('accounts.urls', namespace='accounts')),
+    #path('accounts/', include('accounts.urls')),
     
 ]

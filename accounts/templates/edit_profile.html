@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags%}
+
+{% block title %}Edit Profile - {{ user.username}}{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="edit-profile-container my-5">
+    <h2 class="text-center edit-profile-title">Edit Profile</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <form method="POST" action="{% url 'accounts:edit_profile' user_id=user.id %}" enctype="multipart/form-data" class="edit-profile-form">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+                <div class="form-group mt-4">
+                    <button type="submit" class=" btn btn-primary btn-block edit-profile-submit-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

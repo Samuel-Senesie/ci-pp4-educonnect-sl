@@ -6,7 +6,63 @@
 {% load static %}
 
 <div class="user-profile-container">
-    <div class="user-profile-header">
+    <!-- Background Image Section with Profile Picture -->
+    <div class="profile-header">
+        <div class="background-image-wrapper">
+            {% if profile.background_image %}
+                <img src="{{ profile.background_image.url }}" class="background-image" alt="Background Image">
+            {% else %}
+                <img src="{% static 'images/default_background.jpg' %}" class="background-image" alt="Default Background Image">
+            {% endif %}
+            <form method="POST" action="{% url 'accounts:edit_profile' request.user.id %}" enctype="multipart/form-data" class="d-inline">
+                {% csrf_token %}
+                <input type="file" id="backgroundImageInput" name="background_image" class="d-none" onchange="this.form.submit();">
+                <label for="backgroundImageInput" class="edit-background-btn" aria-label="Edit Background Image">
+                    <i class="fa-solid fa-pen"></i>
+                </label>
+            </form>
+        </div>
+
+        <!-- Profile Picture -->
+        <div class="profile-picture-wrapper">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.porfile_picture.url }}" class="profile-picture rounded-circle">
+            {% else %}
+                <img src="{% static 'images/default_profile_pic.jpg' %}" class="profile-picture rounded-circle" alt="Default Profile Picture">
+            {% endif %}
+            <form method="POST" action="{% url 'accounts:edit_profile' request.user.id %}" enctype="multipart/form-data" class="d-inline">
+                {% csrf_token %}
+                <input type="file" id="profileImageInput" name="profile_picture" class="d-none" onchange="this.form.submit();">
+                <label for="profileImageInput" class="edit-profile-pic-btn" aria-label=" Edit Profile Picture">
+                    <i class="fa-solid fa-pen"></i>
+                </label>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Information Section -->
+    <div class="profile-info">
+        <h3 class="profile-name">{{ profile.user.get_full_name|default:"N/A" }}</h3>
+        {% if profile.user.username %}
+            <p class="username">@{{ profile.user.username }}</p>
+        {% endif %}
+        <p class="contact-info">{{ profile.user.email_or_phone|default:"N/A" }}</p>
+        <P class="role-info">{{ profile.user_role|default:"N/A" }}</P>
+        {% if profile.location %}
+            <p class="location-info">{{profile.location }}</p>
+        {% endif %}
+
+        <!-- Edit Profile Button -->
+        <a href="{% url 'accounts:edit_profile' user_id=request.user.id %}" class="btn edit-profile-btn">Edit Profile</a>  
+    </div>
+
+    <!-- Hidden Form to Handle Image Upload -->
+    <form id="editProfileForm" method="POST" action="{% url 'accounts:edit_profile' user.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+    </form>
+
+
+   <!--<div class="user-profile-header">
         <div class="user-profile-picture-wrapper text-center">
             {% if profile.profile_picture %}
                 <img src="{{ profile.profile_picture.url }}" class="user-profile-picture img-fluid rounded-circle"
@@ -31,10 +87,10 @@
             <li><strong>Date of Birth:</strong> {{ profile.date_of_birth|date:"F j, Y"|default:"N/A" }}</li>
             <li><strong>Location:</strong> {{ profile.location|default:"N/A" }}</li>
         </ul>
-    </div>
+    </div> -->
 
     <!-- Modal for profile editing -->
-    <div id="editProfileModal" class="user-modal">
+    <!--<div id="editProfileModal" class="user-modal">
         <div class="user-modal-content">
             <button class="close user-modal-close" aria-label="Close">&times;</button>
             <form method="POST" action="{% url 'accounts:edit_profile' request.user.id %}" enctype="multipart/form-data">
@@ -50,7 +106,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
 
 </div>
 

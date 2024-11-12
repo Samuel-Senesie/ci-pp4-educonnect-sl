@@ -303,13 +303,13 @@ def edit_profile(request, user_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('accounts:profile', user_id=user_id) #  Redirect to profile detail view
+            return redirect('profile', user_id=user_id) #  Redirect to profile detail view
         else:
             messages.error(request, "Error updating profile. Please check the form for errror.")
     else:
         form = UserProfileForm(instance=user_profile)
     
-    return render(request, 'accounts/edit_profile.html', {'form': form})
+    return render(request, 'edit_profile.html', {'form': form})
 
 # Delete profile view
 def delete_profile(request):
