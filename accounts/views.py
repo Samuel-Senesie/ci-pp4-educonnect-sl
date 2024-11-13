@@ -122,19 +122,13 @@ def profile(request):
     """
     View for logged-in user's profile.
     """
-    #if not request.user.is_authenticated:
-    #    return redirect('accounts:signup')
     try: 
         user_profile = get_object_or_404(UserProfile, user=request.user)
-        #user_profile = UserProfile.objects.get(user__id=user_id)
-        #user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
         logger.errors("User profile does not found for the current user.")
         messages.error(request, "Profile not found.")
         return redirect("accounts:edit_profile")
-    #user_profile = request.user.userprofile
     return render(request, 'profile.html', {'profile': user_profile})
-
 
 # Send verification email view
 #@login_required 
@@ -195,9 +189,7 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         print("Is this method being called?")
         user = form.cleaned_data.get('user')
-        # identifier = form.cleaned_data.get['identifier']
-        # password = form.cleaned_data.get['password']
-
+        
         identifier = form.cleaned_data.get('identifier')
         password = form.cleaned_data.get('password')
 
@@ -213,8 +205,6 @@ class CustomLoginView(LoginView):
             form.add_error(None, "Invalid login credentials.")
             return self.form_invalid(form)
         
-        #Authenticate the user with the retrieved user details
-        #authenticated_user = authenticate(self.request, username=user.username, password=password)
         authenticated_user = self.authenticate_user(user, password)
 
         print("Authenticated User: ", authenticated_user)
@@ -259,7 +249,6 @@ class CustomLoginView(LoginView):
         logger.warning("Form invalid. Login attempt failed due to invalid credentials.")
         return super().form_invalid(form)
  
-
 
 # Logout view
 def custom_logout_view(request):
