@@ -773,7 +773,7 @@ body {
 .user-profile-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
     background-color: #ffffff;
     border-radius: 8px;
 }
@@ -789,7 +789,7 @@ body {
 .background-image-wrapper {
     position: relative;
     width: 100%;
-    height: 170px;
+    height: 110px;
     overflow: hidden;
     border-radius: 8px;
 }
@@ -802,12 +802,12 @@ body {
 
 .edit-background-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
     background-color: rgba(0, 0, 0, 0.5);
     border: none;
     color: #fff;
-    padding: 5px;
+    padding: 3px;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -826,7 +826,7 @@ body {
 
 .profile-info {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 30px;
     color: #333;
 }
 
@@ -835,22 +835,28 @@ body {
     font-weight: bold;
     color: #333;
     font-family: 'Roboto' sans-serif;
+    line-height: 1;
+    margin-bottom: 2px;
 }
 
 .username, .contact-info, .role-info, .location-info {
     font-size: 1rem;
     color: #666;
     margin: 5px 0;
+    line-height: 1;
+    margin: 2px 0;
 }
 
 
 .profile-picture-wrapper {
     position: absolute;
-    top: 100px;   /* Adjust to overlap background image */
+    top: 40px;   /* Adjust to overlap background image */
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
-    height: 200px;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     overflow: hidden;
     border: 5px solid #ffffff;
@@ -870,12 +876,12 @@ body {
 
 .edit-profile-pic-btn {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 10px;
+    right: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     border: none;
     color: #fff;
-    padding: 5px;
+    padding: 2px;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -886,12 +892,95 @@ body {
 
 .profile-info {
     text-align: center;
-    margin-top: 120px;
+    margin-top: 30px;
+    color: #333;
 }
 
 
 .user-profile-actions .user-profile-actions-btn.btn-danger {
     background-color: #d9534f;
+}
+
+.edit-profile-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.edit-profile-btn:hover {
+    background-color: #0056b3;
+}
+
+.profile-divider {
+    border: 0;
+    height: 2px;
+    background-color: #ccc;
+    margin: 10px 0;
+}
+
+.profile-details-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.bio {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border: 8px;
+    background-color: #f9f9f9;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.profile-details-section h4 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.profile-details-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile-details-section li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    padding: 5px 0;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.profile-details-section li strong {
+    font-weight: bold;
+    color: #555;
+}
+
+.profile-details-section li span {
+    color: #666;
+}
+
+.profile-section {
+    margin-top: 5px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.profile-section-header {
+    font-weight: bold;
+    margin-bottom: 2px;
 }
 
 .user-profile-details {

@@ -47,7 +47,7 @@
             <p class="username">@{{ profile.user.username }}</p>
         {% endif %}
         <p class="contact-info">{{ profile.user.email_or_phone|default:"N/A" }}</p>
-        <P class="role-info">{{ profile.user_role|default:"N/A" }}</P>
+        <P class="role-info">{{ profile.user.user_role|default:"N/A" }}</P>
         {% if profile.location %}
             <p class="location-info">{{profile.location }}</p>
         {% endif %}
@@ -55,6 +55,9 @@
         <!-- Edit Profile Button -->
         <a href="{% url 'accounts:edit_profile' user_id=request.user.id %}" class="btn edit-profile-btn">Edit Profile</a>  
     </div>
+
+    <!-- Divider -->
+    <div class="profile-divider"></div>
 
     <!-- Hidden Form to Handle Image Upload -->
     <form id="editProfileForm" method="POST" action="{% url 'accounts:edit_profile' user.id %}" enctype="multipart/form-data">
@@ -107,6 +110,23 @@
             </form>
         </div>
     </div>-->
+
+    <!-- Bio Section -->
+    <h4 class="profile-section-header">About</h4>
+    <div class="profile-section">
+        
+        <p class="About">{{ profile.bio|default:"No bio available." }}</p>
+    </div>
+
+    <!-- Additional Details Section -->
+    <div class="profile-details-section">
+        <ul>
+            <li><strong>Date of Birth:</strong><span>{{ profile.date_of_birth|date:"F j, Y"|default:"N/A" }}</span></li>
+            <li><strong>Gender:</strong>{{ profile.user.gender|default:"N/A" }}</li>
+            <li><strong>Preferred Means of Communication:</strong></span>{{ custom_user.prefered_means_of_communication|default:"N/A" }}</span></li>
+            <li><strong>Preferred Time:</strong> </span>From {{ custom_user.preferred_time_from|default:"N/A" }} to {{ custom_user.preferred_time_to|default:"N/A" }}</span></li>
+        </ul>
+    </div>
 
 </div>
 
