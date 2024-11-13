@@ -2,6 +2,8 @@ from django.urls import include, path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import CustomLoginView, parent_portal_view, school_portal_view, custom_logout_view
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'accounts'
 
@@ -19,8 +21,6 @@ urlpatterns = [
     path('delete_profile/', views.delete_profile, name='delete_profile'),
     path('delete_account/', views.delete_account, name='delete_account'),
     path('logout/', custom_logout_view, name='logout'),
-
-
     
 
     # Password reset URLs

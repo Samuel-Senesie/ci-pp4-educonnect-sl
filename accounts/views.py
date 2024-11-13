@@ -303,7 +303,7 @@ def edit_profile(request, user_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('profile', user_id=user_id) #  Redirect to profile detail view
+            return redirect('accounts:profile') #  Redirect to profile detail view
         else:
             messages.error(request, "Error updating profile. Please check the form for errror.")
     else:

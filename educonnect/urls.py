@@ -21,6 +21,8 @@ from django.contrib.auth import views as auth_views
 #from accounts.views import welcome_view
 from django.views.generic import RedirectView
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +30,10 @@ urlpatterns = [
      path('home/', views.home, name='home'),   # /home URL
     path('contact/', views.contact, name='contact'),
     path('about', views.about, name="about"),
-    path('accounts/', include('accounts.urls', namespace='accounts')),
-    #path('accounts/', include('accounts.urls')),
+    #path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('accounts.urls')),
     
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
