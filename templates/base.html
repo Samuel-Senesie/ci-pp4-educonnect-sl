@@ -42,60 +42,72 @@
 <body class="d-flex flex-column h-100">
 
     <!-- Navigation Bar-->
-    <nav class="navbar navbar-expanding-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{home_url }}">Educonnect-sl
-                <i class="fa fa-home"></i>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+
+            <!-- Navbar Toggle for Mobile/Tablet -->
+            <button class="navbar-toggler order-0" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Right-alligned profile icon-->
-            {% if user.is_authenticated %}
-            <div class="dropdown ml-auto">
-                <a class="nav-link p-0 dropdown-toggle p-0" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {% if user.userprofile.profile_image %}
-                        <img src="{{ user.userprofile.profile_image.url }}" class="profile-icon rounded-circle" alt="Profile Image" width="30" height="30">
-                    {% else %}
-                        <img src="{% static 'images/default_profile.png' %}" class="profile-icon rounded-circle" width="40" height="40">
-                    {% endif %}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="profileDropdown">
-                    <img src="{% if user.userprofile.profile_image %}{{ user.userprofile.profile_image.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" class="rounded-circle mb-2"  width="80" height="80">
-                    <p class="mb-0">{{ user.first_name }}{{ user.last_name }}</p>
-                    <small>{{ user.email_or_phone }}</small>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item btn view-profile" href="{% url 'accounts:profile' %}">View Profile</a>
-                    <a class="dropdown-item btn logout" href="{% url 'accounts:logout' %}">Logout</a>
-                    <a class="dropdown-item btn btn-danger text-white" href="{% url 'accounts:delete_profile' %}">Delete Profile</a>
-                    <a class="dropdown-item btn btn-danger text-white" href="{% url 'accounts:delete_account' %}">Delet Account</a>
-                </div>
-            </div>
-        {% else %}
-            <!-- Login Burron for Non-Authenicated User -->
-            <a class="nav-link nav-login-btn ml-auto" href="{% url 'accounts:login' %}">
-                <div class="icon-circle">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <span>Login</span>
-            </a>
-        {% endif %}
+            <!-- Logo at Center -->
+            <a class="navbar-brand mx-auto order-0 order-lg-1 mx-lg-0" href="{{ home_url }}">Educonnect-sl</a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
+            <!-- Navbar links for larger screens -->
+            <div class="collapse navbar-collapse justify-content-center order-2" id="navbarNav">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">
-                            <i class="fa fa-home"></i>Home
-                        </a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:signup' %}">
-                            <i class="fa fa-user-plus"></i>Signup
-                        </a> 
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">Signup</a> 
                     </li>
+                    {% if user.is_authenticated %}
+                        {% if user.user_role == 'Parent' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'accounts:parent_portal' %}">Parent Portal</a>
+                            </li>
+                        {% elif user.is_school_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'school_portal' %}">School Portal</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}     
                 </ul>
+            </div>
+
+            <!-- Right-alligned profile icon-->
+            <div class="ml-auto d-flex align-items-center order-1 order-lg-2">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a class="nav-link p-0 dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if user.userprofile.profile_image %}
+                                <img src="{{ user.userprofile.profile_image.url }}" class="profile-icon rounded-circle" alt="Profile Image" width="30" height="30">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.png' %}" class="profile-icon rounded-circle" width="40" height="40">
+                            {% endif %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="profileDropdown">
+                            <img src="{% if user.userprofile.profile_image %}{{ user.userprofile.profile_image.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" class="rounded-circle mb-2"  width="80" height="80">
+                            <p class="mb-0">{{ user.first_name }} {{ user.last_name }}</p>
+                            <small>{{ user.email_or_phone }}</small>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item btn view-profile" href="{% url 'accounts:profile' %}">View Profile</a>
+                            <a class="dropdown-item btn logout" href="{% url 'accounts:logout' %}">Logout</a>
+                            <a class="dropdown-item btn btn-danger text-white" href="{% url 'accounts:delete_profile' %}">Delete Profile</a>
+                            <a class="dropdown-item btn btn-danger text-white" href="{% url 'accounts:delete_account' %}">Delete Account</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Login Button for Non-Authenicated User -->
+                    <a class="nav-link nav-login-btn ml-auto" href="{% url 'accounts:login' %}">
+                        <div class="icon-circle">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span>Login</span>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -105,7 +117,7 @@
         <div class="notification-container">
             {% for message in messages %}
                 <div class="notification alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{message}}
+                    {{ message }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -114,7 +126,7 @@
         </div>
     {% endif %}
 
-    <!-- Main Content-->
+    <!-- Main Content -->
     <main role="main" class="flex-shrink-0">
         <div class="container mt-4">
             <!--This section is for page-specific contents -->
