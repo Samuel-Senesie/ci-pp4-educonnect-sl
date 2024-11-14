@@ -88,6 +88,11 @@
                                 <img src="{% static 'images/default_profile.png' %}" class="profile-icon rounded-circle" width="40" height="40">
                             {% endif %}
                         </a>
+
+                        <!-- Display the users first name under the profile icon -->
+                         <p class="mb-0 font-weight-bold text-center text-white">{{ user.last_name }}</p>
+                         
+                         <!-- Dropdown menu for profilr options -->
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="profileDropdown">
                             <img src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}" class="rounded-circle mb-2"  width="80" height="80">
                             <p class="mb-0">{{ user.first_name }} {{ user.last_name }}</p>
