@@ -78,10 +78,10 @@
     <!-- Additional Details Section -->
     <div class="profile-details-section">
         <ul>
-            <li><strong>Date of Birth:</strong><span>{{ profile.date_of_birth|date:"F j, Y"|default:"N/A" }}</span></li>
-            <li><strong>Gender:</strong>{{ profile.user.gender|default:"N/A" }}</li>
-            <li><strong>Preferred Means of Communication:</strong></span>{{ custom_user.prefered_means_of_communication|default:"N/A" }}</span></li>
-            <li><strong>Preferred Time:</strong> </span>From {{ custom_user.preferred_time_from|default:"N/A" }} to {{ custom_user.preferred_time_to|default:"N/A" }}</span></li>
+            <li><strong>Date of Birth:</strong><span>{{ user.date_of_birth|date:"F j, Y"|default:"N/A" }}</span></li>
+            <li><strong>Gender:</strong>{{ user.gender|default:"N/A" }}</li>
+            <li><strong>Preferred Means of Communication:</strong></span>{{ user.preferred_means_of_communication|default:"N/A" }}</span></li>
+            <li><strong>Preferred Time:</strong> </span>From {{ user.preferred_time_from|default:"N/A" }} to {{ user.preferred_time_to|default:"N/A" }}</span></li>
         </ul>
     </div>
 
