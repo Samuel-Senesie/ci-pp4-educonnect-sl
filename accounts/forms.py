@@ -8,6 +8,11 @@ from .models import CustomUser, UserProfile
 from .mixins import PasswordValidationMixin
 from django.utils import timezone
 from django.core.validators import EmailValidator, RegexValidator
+from PIL import Image, ImageFile
+from django.core.files.base import ContentFile
+from io import BytesIO
+
+
 
 class CustomUserCreationForm(UserCreationForm, PasswordValidationMixin):
     """
@@ -231,7 +236,42 @@ class CustomLoginForm(AuthenticationForm):
 
         #if user is None:
         #    raise ValidationError(_("Invalid credentials. Please try again."))
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+def validate_and_resize_image(image_file, max_size=5 * 102 *1024, max_dimensions=(1024, 521)):
     
+    if not image_file:
+        raise ValidationError("No image file provided.")
+
+    # Check file size
+    if image_file.size > max_size:
+        raise ValidationError(f"Image size should not excee {max_size / (1024 * 1024):.2f} MB.")
+    
+    # Open the image
+    try:
+        image = Image.open(image_file)
+    except Exception as e:
+        raise ValidationError("Invalid image file.") from e
+    
+    # Validate file format
+    valid_formats = {"JPEG", "PNG", "GIF"}
+    if image.format not in valid_formats:
+        raise ValidationError("Unsupported file format. Allowed formats are: {', '.join(valid_formats)}.")
+    
+    # Convert to RGB if necessary
+    if image.mode in ("RGBA", "P"):
+        image = image.convert("RGB") # Convert to JPEG-compatible format if needed
+
+    # Resize the image
+    image.thumbnail(max_dimensions, Image.Resampling.LANCZOS)
+
+    # Save resized image to a temporary buffer
+    temp_image = BytesIO()
+    image.save(temp_image, format='JPEG', quality=85)
+    temp_image.seek(0)
+
+    return ContentFile(temp_image.read(), name=image_file.name)
 
 class UserProfileForm(forms.ModelForm):
     """
@@ -240,13 +280,37 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['bio', 'profile_picture', 'location']
+        fields = ['bio', 'profile_picture', 'background_image', 'location']
     
     def clean_profile_picture(self):
-        picture = self.cleaned_data.get('profile_picture')
-        if picture and picture.size > 5 * 1024 * 1024:  # 5MB limit
-            raise ValidationError(_("Profile picture must be under 5MB."))
-        return picture
+        profile_picture = self.cleaned_data.get('profile_picture')
+        if profile_picture:
+            return validate_and_resize_image(profile_picture, max_dimensions=(300, 300))
+        return profile_picture
+    
+    def cleaned_background_image(self):
+        background_image = self.cleaned_data.get('background_image')
+        if background_image:
+            return validate_and_resize_image(background_image, max_dimensions=(1024, 512))
+        return background_image
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Handle profile picture replacement
+        if 'profile_picture' in self.changed_data and instance.profile_picture:
+            if instance.profile_picture.name != 'default_profile_pic.jpeg':
+                instance.profile_picture.delete(save=False)
+        
+        # Handle background image replacement
+        if 'background_image' in self.changed_data and instance.background_image:
+            if instance.background_image.name != 'background_image.jpeg':
+                instance.background_image.delete(save=False)
+        
+        if commit:
+            instance.save()
+        
+        return instance
 
 class PasswordResetRequestForm(PasswordResetForm):
     """

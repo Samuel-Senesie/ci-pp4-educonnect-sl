@@ -5,6 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.core.validators import RegexValidator, EmailValidator
+from PIL import Image, ImageFile
+from django.core.files.base import ContentFile
+from io import BytesIO
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -158,9 +161,37 @@ class UserProfile(models.Model):
     profile_id = models.AutoField(primary_key=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     bio = models.TextField(_('bio'), max_length=500, blank=True, null=True)
-    profile_picture = models.ImageField(_('profile picture'), default='default.jpeg', upload_to='profile_pics/', blank=True, null=True)
+    profile_picture = models.ImageField(
+        _('profile picture'), 
+        default='profile_pics/default_profile_pic.jpeg', 
+        upload_to='profile_pics/', 
+        blank=True, 
+        null=True
+    )
+    background_image = models.ImageField(
+        _('background image'), 
+        default='background_images/default_background_image.jpeg', 
+        upload_to='background_images/', 
+        blank=True, 
+        null=True
+    )
     location = models.CharField(_('location'), max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.profile_picture:
+            self.resize_image(self.background_image.path, max_size=(300, 300))
+        
+        if self.background_image:
+            self.resize_image(self.background_image.path, max_size=(1200, 400))
+    @staticmethod
+    def resize_image(image_path, max_size):
+        """ Resize image to max and overright original file."""
+        with Image.open(image_path) as img:
+            img.thumbnail(max_size)
+            img.save(image_path, format='JPEG', quality=90)
 
     def __str__(self):
         return f'{self.user.get_full_name() or self.user.username} - {self.location or "Location not provided"} (UserProfile)'

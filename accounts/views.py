@@ -28,6 +28,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.shortcuts import redirect
+from .forms import validate_and_resize_image
 
 logger = logging.getLogger(__name__) #Debug
 
@@ -290,7 +291,26 @@ def edit_profile(request, user_id):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
-            form.save()
+
+             # Handle backgroun image and remove existing images if new ones are uploaded
+            background_image = form.cleaned_data.get('background_image')
+            if background_image:
+                resized_picture = validate_and_resize_image(background_image)
+                if user_profile.background_image:
+                    user_profile.background_image.delete(save=False)
+                user_profile.background_image.save(background_image.name, resized_picture)
+                
+
+            # Handle profile picture and remove existing images if new ones are uploaded
+            profile_picture = form.cleaned_data.get('profile_picture')
+            if profile_picture:
+                resized_picture = validate_and_resize_image(profile_picture)
+                if user_profile.profile_picture:
+                    user_profile.profile_picture.delete(save=False)
+                user_profile.profile_picture.save(profile_picture.name, resized_picture)      
+
+            # Save changes
+            user_profile.save()
             messages.success(request, 'Profile updated successfully!')
             return redirect('accounts:profile') #  Redirect to profile detail view
         else:
