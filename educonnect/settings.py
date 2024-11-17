@@ -31,13 +31,13 @@ LOGOUT_REDIRECT_URL = 'home'
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d'
+#SECRET_KEY = 'django-insecure-r29qq0su=^+szhj*^q!^%!iyf#@*ys=(3)o&vp+n=2z95ck#9d'
 SECRET_KEY = os.environ.get("SECRET_KEY", 'fallback-defuault-if-not-set')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net','.herokuapp.com']
+ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-tfzf7ezlt6v.ws.codeinstitute-ide.net']
 
 
 # Application definition
@@ -103,13 +103,18 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 #    }
 #}
 
-DATABASES = {
-    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
-}
+DATABASE_URLS = os.environ.get("DATABASE_URL", "")
+if DATABASE_URLS:
+
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
+else:
+    raise ValueError("DATABASE_URL is not set. Please check your environment varaibles or .env file")
 
 CSRF_TRUSTED_ORIGINS = [
     "https://samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net",
-    "https://8000-samuelsenes-cipp4educon-9oc5lbky0f0.ws.codeinstitute-ide.net",
+    "https://8000-samuelsenes-cipp4educon-tfzf7ezlt6v.ws.codeinstitute-ide.net",
     "https://educonnect-sl-5ffcb9da3e93.herokuapp.com",
 ]
 
