@@ -35,9 +35,9 @@ LOGOUT_REDIRECT_URL = 'home'
 SECRET_KEY = os.environ.get("SECRET_KEY", 'fallback-defuault-if-not-set')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-tfzf7ezlt6v.ws.codeinstitute-ide.net']
+ALLOWED_HOSTS = ['8000-samuelsenes-cipp4educon-tfzf7ezlt6v.ws.codeinstitute-ide.net', 'educonnect-sl-5ffcb9da3e93.herokuapp.com']
 
 
 # Application definition
