@@ -11,6 +11,7 @@ from django.core.validators import EmailValidator, RegexValidator
 from PIL import Image, ImageFile
 from django.core.files.base import ContentFile
 from io import BytesIO
+from .utils import validate_and_resize_image
 
 
 
@@ -134,20 +135,42 @@ class CustomUserCreationForm(UserCreationForm, PasswordValidationMixin):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['bio', 'location', 'profile_picture']    
+        fields = ['bio', 'location', 'profile_picture', 'background_image']
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'row': 3, 
+                'placeholder': 'Write a short bio...'
+            })
+        }    
+    
+    def clean_profile_picture(self):
+        profile_picture = self.cleaned_data.get('profile_picture')
+        if profile_picture:
+            return validate_and_resize_image(profile_picture, max_dimensions=(300, 300))
+        return profile_picture
+    
+    def cleaned_background_image(self):
+        background_image = self.clean_data.get('background_image')
+        if background_image:
+            return validate_and_resize_image(background_image, max_dimensions=(1024, 512))
+        return background_image
 
-class CustomUserProfileEditForm(ProfileEditForm):
+class CustomUserEditForm(forms.ModelForm):
     """
     Form for updating an existing user.
     """
 
     class Meta:
         model = CustomUser
-        fields = (
-            'first_name', 'last_name', 'email_or_phone', 'date_of_birth', 'gender',
-            'user_role', 'preferred_means_of_communication', 
-            'preferred_time_from', 'preferred_time_to', 'is_active', 'is_verified'
-        )
+        fields = [
+            'first_name', 'last_name', 'email_or_phone', 'gender', 'preferred_means_of_communication', 
+            'preferred_time_from', 'preferred_time_to'
+        ]
+        widgets = {
+            'preferred_time_from': forms.TimeInput(attrs={'type': 'time'}),
+            'preferred_time_to': forms.TimeInput(attrs={'type': 'time'}),
+        }
 
 class CustomLoginForm(AuthenticationForm):
     """
@@ -237,41 +260,6 @@ class CustomLoginForm(AuthenticationForm):
         #if user is None:
         #    raise ValidationError(_("Invalid credentials. Please try again."))
 
-ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-def validate_and_resize_image(image_file, max_size=5 * 102 *1024, max_dimensions=(1024, 521)):
-    
-    if not image_file:
-        raise ValidationError("No image file provided.")
-
-    # Check file size
-    if image_file.size > max_size:
-        raise ValidationError(f"Image size should not excee {max_size / (1024 * 1024):.2f} MB.")
-    
-    # Open the image
-    try:
-        image = Image.open(image_file)
-    except Exception as e:
-        raise ValidationError("Invalid image file.") from e
-    
-    # Validate file format
-    valid_formats = {"JPEG", "PNG", "GIF"}
-    if image.format not in valid_formats:
-        raise ValidationError("Unsupported file format. Allowed formats are: {', '.join(valid_formats)}.")
-    
-    # Convert to RGB if necessary
-    if image.mode in ("RGBA", "P"):
-        image = image.convert("RGB") # Convert to JPEG-compatible format if needed
-
-    # Resize the image
-    image.thumbnail(max_dimensions, Image.Resampling.LANCZOS)
-
-    # Save resized image to a temporary buffer
-    temp_image = BytesIO()
-    image.save(temp_image, format='JPEG', quality=85)
-    temp_image.seek(0)
-
-    return ContentFile(temp_image.read(), name=image_file.name)
 
 class UserProfileForm(forms.ModelForm):
     """

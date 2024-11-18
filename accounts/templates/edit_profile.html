@@ -12,7 +12,56 @@
         <div class="col-lg-6 col-md-8 col-sm-10">
             <form method="POST" action="{% url 'accounts:edit_profile' user_id=user.id %}" enctype="multipart/form-data" class="edit-profile-form">
                 {% csrf_token %}
-                {{ form|crispy }}
+                <!--{{ form|crispy }}-->
+                
+                <h4 class="mb-3">Profile Information</h4>
+                <div class="form-group">
+                    <label for="id_bio"><b>Bio:</b></label>
+                    {{ form.bio }}
+                </div>
+                <div class="form-group">
+                    <label for="id_location"><b>Location:</b></label>
+                    {{ form.location }}
+                </div>
+
+                <!--<hr class="my-4">-->
+
+
+                <div class="profile-divider"></div>
+                <h4 class="mb-3">User Information</h4>
+                <div class="form-group">
+                    <label for="id_first_name"><b>First Name:</b></label>
+                    <input type="text" class="form-control" value="{{ user.first_name }}">
+                    
+                </div>
+                <div class="form-group">
+                    <label for="id_last_name"><b>Last Name:</b></label>
+                    <input type="text" class="form-control" value="{{ user.last_name }}">
+                </div>
+                <div class="form-group">
+                    <label for="id_username"><b>Username:</b></label>
+                    <input type="text" class="form-control" value="{{ user.username }}">
+                </div>
+                <div class="form-group">
+                    <label for="id_email_or_phone"><b>Email of Phone:</b></label>
+                    <input type="text" class="form-control" value="{{ user.email_or_phone }}">
+                </div>
+                <div class="form-group">
+                    <label for="id_gender"><b>Gender:</b></label>
+                    <input type="text" class="form-control" value="{{ user.gender }}">
+                    
+                </div>
+
+                <!-- Read only fields for DOB and User Role -->
+                 <div class="form-group">
+                    <label><b>Date of Birth:</b></label>
+                    <input type="text" class="form-control" value="{{ user.date_of_birth }}" readonly>
+                 </div>
+
+                 <div class="form-group"></div>
+                    <label><b>Role:</b></label>
+                    <input type="text" class="form-control" value="{{ user.user_role }}" readonly>
+                 </div>
 
                 <div class="form-group mt-4">
                     <button type="submit" class=" btn btn-primary btn-block edit-profile-submit-btn">Save Changes</button>
