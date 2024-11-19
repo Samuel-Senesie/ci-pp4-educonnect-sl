@@ -14,55 +14,79 @@
                 {% csrf_token %}
                 <!--{{ form|crispy }}-->
                 
-                <h4 class="mb-3">Profile Information</h4>
+                <h4 class="text-center mb-3">Profile Information</h4>
                 <div class="form-group">
                     <label for="id_bio"><b>Bio:</b></label>
-                    {{ form.bio }}
+                    <textarea name="bio" id="id_bio" rows="4" maxlength="300" class="form-control bio-textarea" aria-describedby="bioHelp" placeholder="Write a short bio here...">
+                        {{ bio|default:"" }}
+                    </textarea>
+                    <small id="bioHelp" class="form-text text-muted">
+                        You can write up to 300 characters.<span id="bioCounter"> </span> characters remaining.
+                    </small>
                 </div>
                 <div class="form-group">
                     <label for="id_location"><b>Location:</b></label>
+                    <input type="text" name="location" id="id_location" class="form-control" value="{{ location|default:'' }}" placeholder="Enter your location">
                     {{ form.location }}
                 </div>
 
                 <!--<hr class="my-4">-->
 
 
-                <div class="profile-divider"></div>
-                <h4 class="mb-3">User Information</h4>
+                <div class="profile-divider my-4"></div>
+                <h4 class="text-center mb-3">User Information</h4>
                 <div class="form-group">
                     <label for="id_first_name"><b>First Name:</b></label>
-                    <input type="text" class="form-control" value="{{ user.first_name }}">
+                    {{ user_form.first_name }}
                     
                 </div>
                 <div class="form-group">
                     <label for="id_last_name"><b>Last Name:</b></label>
-                    <input type="text" class="form-control" value="{{ user.last_name }}">
+                    {{ user_form.last_name }}
                 </div>
+
                 <div class="form-group">
                     <label for="id_username"><b>Username:</b></label>
-                    <input type="text" class="form-control" value="{{ user.username }}">
+                    {{ user_form.username }}
                 </div>
+
                 <div class="form-group">
                     <label for="id_email_or_phone"><b>Email of Phone:</b></label>
-                    <input type="text" class="form-control" value="{{ user.email_or_phone }}">
+                    {{ user_form.email_or_phone }}
                 </div>
+
                 <div class="form-group">
                     <label for="id_gender"><b>Gender:</b></label>
-                    <input type="text" class="form-control" value="{{ user.gender }}">
-                    
+                    {{ user_form.gender }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_gender"><b>Preferred Means of Communication:</b></label>
+                    {{ user_form.preferred_means_of_communication }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_gender"><b>Preferred Time From:</b></label>
+                    {{ user_form.preferred_time_from }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_gender"><b>Preferred Time To:</b></label>
+                    {{ user_form.preferred_time_to }}
                 </div>
 
                 <!-- Read only fields for DOB and User Role -->
-                 <div class="form-group">
+                <div class="form-group">
                     <label><b>Date of Birth:</b></label>
                     <input type="text" class="form-control" value="{{ user.date_of_birth }}" readonly>
-                 </div>
+                </div>
 
-                 <div class="form-group"></div>
+                <div class="form-group">
                     <label><b>Role:</b></label>
                     <input type="text" class="form-control" value="{{ user.user_role }}" readonly>
-                 </div>
+                </div>
 
+                <!--Save Changes Button --> 
                 <div class="form-group mt-4">
                     <button type="submit" class=" btn btn-primary btn-block edit-profile-submit-btn">Save Changes</button>
                 </div>
@@ -70,5 +94,39 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const bioField = document.getElementById("id_bio");
+    const bioCounter = document.getElementById("bioCounter");
+    const maxLength = 300;
+    console.log("Bio field not found")
+    console.log("Bio field found");
+    if (!bioField || !bioCounter) {
+        console.error("Bio field or counter not found in DOM.");
+        return;
+    }
+
+    function updateBioCounter() {
+        const remaining = maxLength - bioField.value.length;   // Calculate remaining characters
+        console.log("Remaining characters:", remaining)
+        bioCounter.textContent = remaining;
+        
+
+        if (remaining <= 20) {
+            bioCounter.classList.add("warning");
+        } else {
+            bioCounter.classList.remove("warning");
+        }
+    }
+
+    // Update character count on input
+    bioField.addEventListener("input", updateBioCounter);
+    console.log('Event listener added to bio field');
+
+    // Initialize the counter on page load
+    updateBioCounter();
+});
+</script>
 
 {% endblock %}

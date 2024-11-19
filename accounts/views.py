@@ -13,7 +13,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.crypto import get_random_string
 from .models import UserProfile, CustomUser
-from .forms import CustomUserCreationForm, CustomLoginForm, UserProfileForm, ProfileEditForm
+from .forms import CustomUserCreationForm, CustomLoginForm, UserProfileForm, ProfileEditForm, UserProfileEditForm, CustomUserEditForm
 from datetime import date, time, datetime
 from django.views.decorators.csrf import csrf_protect
 from twilio.rest import Client
@@ -129,7 +129,23 @@ def profile(request):
         logger.errors("User profile does not found for the current user.")
         messages.error(request, "Profile not found.")
         return redirect("accounts:edit_profile")
-    return render(request, 'profile.html', {'profile': user_profile})
+
+    if request.method == 'POST':
+        # Handle profile picture and background image updates
+        profile_form = UserProfileEditForm(request.POST, request.FILES, isinstance=user_profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect ('accounts:profile')
+        else:
+            messages.error(request, "Error updating profile image.")
+    else:
+        profile_form = UserProfileEditForm(instance=user_profile)
+
+    return render(request, 'profile.html', {
+        'profile': user_profile,
+        'profile_form': profile_form
+    })
 
 # Send verification email view
 #@login_required 
@@ -282,43 +298,84 @@ def user_profile_details(request, pk):
     return render(request, 'accounts/user_profile_details.html', {'profile': profile})
 
 # Edit profile view
-@login_required
-def edit_profile(request, user_id):
+#@login_required
+#def edit_profile(request, user_id):
     """
     Allow users to edit profile information.
     """
-    user_profile = request.user.userprofile
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
+#    user_profile = request.user.userprofile
+#    if request.method == 'POST':
+#        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+#        if form.is_valid():
 
              # Handle backgroun image and remove existing images if new ones are uploaded
-            background_image = form.cleaned_data.get('background_image')
-            if background_image:
-                resized_picture = validate_and_resize_image(background_image)
-                if user_profile.background_image:
-                    user_profile.background_image.delete(save=False)
-                user_profile.background_image.save(background_image.name, resized_picture)
+#            background_image = form.cleaned_data.get('background_image')
+#            if background_image:
+#                resized_picture = validate_and_resize_image(background_image)
+#                if user_profile.background_image:
+#                    user_profile.background_image.delete(save=False)
+#                user_profile.background_image.save(background_image.name, resized_picture)
                 
 
             # Handle profile picture and remove existing images if new ones are uploaded
-            profile_picture = form.cleaned_data.get('profile_picture')
-            if profile_picture:
-                resized_picture = validate_and_resize_image(profile_picture)
-                if user_profile.profile_picture:
-                    user_profile.profile_picture.delete(save=False)
-                user_profile.profile_picture.save(profile_picture.name, resized_picture)      
+#            profile_picture = form.cleaned_data.get('profile_picture')
+#            if profile_picture:
+#                resized_picture = validate_and_resize_image(profile_picture)
+#                if user_profile.profile_picture:
+#                    user_profile.profile_picture.delete(save=False)
+#                user_profile.profile_picture.save(profile_picture.name, resized_picture)      
 
             # Save changes
+#            user_profile.save()
+#            messages.success(request, 'Profile updated successfully!')
+#            return redirect('accounts:profile') #  Redirect to profile detail view
+#        else:
+#            messages.error(request, "Error updating profile. Please check the form for errror.")
+#    else:
+#        form = UserProfileForm(instance=user_profile)
+    
+#    return render(request, 'edit_profile.html', {'form': form})
+
+@login_required
+def edit_profile(request, user_id):
+    """
+    View for editing user profile information.
+    """
+    #user = request.user
+    user = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
+
+    if request.method == 'POST':
+        user_form = CustomUserEditForm(request.POST, instance=user)
+        profile_form = UserProfileEditForm(request.POST, request.FILES, instance=user_profile)
+
+        #Handle direct input of bio
+        bio_data = request.POST.get('bio', '')
+        if bio_data:
+            user_profile.bio = bio_data # Save bio directly
+    
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             user_profile.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('accounts:profile') #  Redirect to profile detail view
+            return redirect('accounts:profile')
         else:
-            messages.error(request, "Error updating profile. Please check the form for errror.")
+            print("User Form Errors:", user_form.errors)
+            print("Profile Form Erros:", profile_form.errors)
+            messages.error(request, "Error updating profile. Please check the form for errors")
     else:
-        form = UserProfileForm(instance=user_profile)
-    
-    return render(request, 'edit_profile.html', {'form': form})
+        user_form = CustomUserEditForm(instance=user)
+        profile_form = UserProfileEditForm(instance=user_profile)
+    return render(request, 'edit_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'bio': user_profile.bio,
+        'location': user_profile.location
+    })
+
+
+
 
 # Delete profile view
 def delete_profile(request):

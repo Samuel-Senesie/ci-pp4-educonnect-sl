@@ -1088,7 +1088,7 @@ body {
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
-    font-family: 'Roboto', sans;
+    font-family: 'Roboto', sans-serif;
 }
 
 .edit-profile-form {
@@ -1096,6 +1096,18 @@ body {
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-profile-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.edit-profile-container h4 {
+    text-align: center;
+    font-size: 1.25;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #444;
 }
 
 .edit-profile-submit-btn {
@@ -1106,10 +1118,27 @@ body {
     border-radius: 4px;
     padding: 10px;
     cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .edit-profile-submit-btn:hover {
     background-color: #004494;
+}
+
+#bioCounter {
+    font-weight: bold;
+    color: #555;
+}
+
+#bioCounter.warning {
+    color: red;
+}
+.bio-textarea {
+    padding: 5px;
+    text-align: left;
+    resize: none;
 }
 
 /* Role based views */

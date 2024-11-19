@@ -164,12 +164,18 @@ class CustomUserEditForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = [
-            'first_name', 'last_name', 'email_or_phone', 'gender', 'preferred_means_of_communication', 
+            'first_name', 'last_name', 'username', 'email_or_phone', 'gender', 'preferred_means_of_communication', 
             'preferred_time_from', 'preferred_time_to'
         ]
         widgets = {
-            'preferred_time_from': forms.TimeInput(attrs={'type': 'time'}),
-            'preferred_time_to': forms.TimeInput(attrs={'type': 'time'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email_or_phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}),
+            'preferred_means_of_communication': forms.RadioSelect(attrs={'class': 'form-radio'}),
+            'preferred_time_from': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'preferred_time_to': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
         }
 
 class CustomLoginForm(AuthenticationForm):
@@ -299,6 +305,24 @@ class UserProfileForm(forms.ModelForm):
             instance.save()
         
         return instance
+
+class UserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['bio', 'location', 'profile_picture', 'background_image']
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'maxlength': 300,
+                'placeholder': 'Write a short bio...'
+            }),
+
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your location..'
+            }),
+        }
 
 class PasswordResetRequestForm(PasswordResetForm):
     """
