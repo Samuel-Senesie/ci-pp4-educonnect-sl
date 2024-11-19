@@ -11,6 +11,7 @@ urlpatterns = [
     #path('home/', views.home, name='home'),
     path('login_view/', CustomLoginView.as_view(), name='login_view'),
     path('parent_portal/', views.parent_portal_view, name='parent_portal'),
+    #path('teacher_portal/', views.teacher_portal_view, name='teacher_portal'),
     path('school_portal/', school_portal_view, name='school_portal'),
     path('signup/', views.signup, name='signup'),
     path('signup/review/', views.signup_review, name='signup_review'),

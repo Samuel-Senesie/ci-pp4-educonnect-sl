@@ -56,8 +56,13 @@
             <p class="location-info">{{profile.location }}</p>
         {% endif %}
 
-        <!-- Edit Profile Button -->
-        <a href="{% url 'accounts:edit_profile' user_id=request.user.id %}" class="btn edit-profile-btn">Edit Profile</a>  
+        <div class="profile-button-container">
+            <!-- Edit Profile Button -->
+            <a href="{% url 'accounts:edit_profile' user_id=request.user.id %}" class="btn edit-profile-btn">Edit Profile</a>  
+
+            <!-- Back Button -->
+            <a href="{% url role_redirect_url %}" class="btn btn-seconday back-btn mt-3">Back</a>
+        </div>
     </div>
 
     <!-- Divider -->

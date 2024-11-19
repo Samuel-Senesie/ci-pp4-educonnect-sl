@@ -128,7 +128,7 @@ def profile(request):
     except UserProfile.DoesNotExist:
         logger.errors("User profile does not found for the current user.")
         messages.error(request, "Profile not found.")
-        return redirect("accounts:edit_profile")
+        return redirect("accounts:edit_profile", user_id=request.user.id)
 
     if request.method == 'POST':
         # Handle profile picture and background image updates
@@ -136,15 +136,29 @@ def profile(request):
         if profile_form.is_valid():
             profile_form.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect ('accounts:profile')
+
+            # Redirect users to their role-based views
+            if request.user.user_role == "Parent":
+                return redirect("accounts:parent_portal")
+            elif request.user.user_role == "Teacher":
+                return redirect("accounts:teacher_portal")
+            else:
+                return redirect ('home')
         else:
             messages.error(request, "Error updating profile image.")
     else:
         profile_form = UserProfileEditForm(instance=user_profile)
+    
+    role_redirect_url = "home"
+    if request.user.user_role == "Parent":
+        role_redirect_url = "accounts:parent_portal"
+    #elif request.user.user_role == "Teacher":
+    #    role_redirect_url = "accounts:teacher_portal"
 
     return render(request, 'profile.html', {
         'profile': user_profile,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'role_redirect_url': role_redirect_url,
     })
 
 # Send verification email view
