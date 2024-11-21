@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Profile{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="delete-profile-container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="delete-profile-card card shadow border-0">
+                <div class="delete-profile-card-body card-body text-center">
+                    <h2 class="delete-profile-title text-danger mb-4">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>Delete Profile
+                    </h2>
+                    <p class="delete-profile-text text-muted">
+                        Are you sure you want to delete your profile? This action cannot be undone, but your account will remain active.
+                    </p>
+                    <!-- Form for deleteing profile -->
+                     <form method="POST" action="{% url 'accounts:delete_profile' %}" class="delete-profile-form mt-4">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-profile-confirm-btn btn btn-danger btn-lg me-3">
+                            <i class="fa-solid fa-trash me-2"></i> Yes, Delete Profile
+                        </button>
+                        <a href="{% url 'accounts:profile' %}" class="delete-profile-cancel-btn btn btn-secondary btn-lg">
+                            <i class="fa-solid fa-times me-2"></i>Cancel
+                        </a>
+                     </form>
+                </div>
+            </div>   
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}

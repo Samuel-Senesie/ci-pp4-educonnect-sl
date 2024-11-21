@@ -1094,6 +1094,50 @@ body {
     color: #000;
 }
 
+/* Delete User Profile */
+.delete-profile-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.delete-profile-card {
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+.delete-profile-card-body {
+    padding: 2rem;
+}
+
+.delete-profile-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.delete-profile-text {
+    font-size: 1rem;
+}
+
+.delete-profile-confirm-btn {
+    background-color: #dc3545;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.delete-profile-confirm-btn:hover {
+    background-color: #c82333;
+}
+
+.delete-profile-cancel-btn {
+    background-color: #6c757d;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.delete-profile-cancel-btn:hover {
+    background-color: #5a6268;
+}
+
 /* Edit Profile Page */
 .edit-profile-container {
     max-width: 800px;

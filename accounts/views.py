@@ -190,6 +190,35 @@ def profile(request):
         'role_redirect_url': role_redirect_url,
     })
 
+# Delete profile view
+@login_required
+def delete_profile(request):
+    """ 
+    Allows users to delete thier profile while keeping ther account active.
+    """
+
+    # First, try to fetch the UserProfile using .filter().first()
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+
+    # if no profile exists, handle it grecefully 
+    if not user_profile:
+        messages.success(redirect, "No profile found to delete.")
+        return redirect("home")
+    
+    # Use get_object_or_404 to provide fallback and prevent tamparing
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    # Handle profile deletion if user submits the form
+    if request.method == "POST":
+        # Delete the profile
+        user_profile.delete()
+        messages.success(request, "Your profile has been successfully deleted.")
+        # Redirect to the home page or a relevan view
+        return redirect ("home")
+
+    # Render the confirmation page
+    return render(request, "delete_profile.html", {"user_profile": user_profile})
+
 # Send verification email view
 #@login_required 
 #def send_verification_email(request, user):
@@ -421,8 +450,8 @@ def edit_profile(request, user_id):
 
 
 # Delete profile view
-def delete_profile(request):
-    return render(request, 'accounts/delete_profile.html')
+#def delete_profile(request):
+#    return render(request, 'accounts/delete_profile.html')
 
 # Delete account view
 def delete_account(request):

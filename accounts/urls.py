@@ -20,7 +20,7 @@ urlpatterns = [
     path('profile/<int:user_id>/', views.profile, name='profile'),
     path('profile/edit/<int:user_id>/', views.edit_profile, name='edit_profile'),
     path('delete_profile/', views.delete_profile, name='delete_profile'),
-    path('delete_account/', views.delete_account, name='delete_account'),
+    path('account/delete/', views.delete_account, name='delete_account'),
     path('logout/', custom_logout_view, name='logout'),
     
 
@@ -42,6 +42,7 @@ urlpatterns = [
 
     # Account activation and status URLs
     path('account_inactive/', views.account_inactive, name='account_inactive'),
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    #path('accounts/', include('accounts.urls'))
     
 ]
