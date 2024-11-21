@@ -2,6 +2,13 @@
 
 ### Link to Deployed Site: [WAEC Prep Arena](https://educonnect-sl-5ffcb9da3e93.herokuapp.com/home/)
 
+## Bugs
+
+## Fixed Bugs
+| **Bug** | **Identified Issues** | **Fix**|
+| ------- | --------------------- | ------ |
+| User abale to log in after account deletion | Ther user.delete() method was not beign called due to missing parentheses (user.delete was used instead of user.delete()). As a result, the associacted UserProfile was not deleted causing RelatedObjectDoseNotExist error. | Ensured the user.delete() was called correctly to delete the account. Modified the delete_account logic to delete the UserProfile explicitly before deleting the user. Cleaned the orphaned profiles from the database to avoid related object errors. |
+
 ## Credits
 
 * The user profile development was lernt and adapted from  [Code Schafer](https://youtu.be/CQ90L5jfldw?si=g2kEZ--_iqBuHn1B)
