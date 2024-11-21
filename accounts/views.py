@@ -454,8 +454,27 @@ def edit_profile(request, user_id):
 #    return render(request, 'accounts/delete_profile.html')
 
 # Delete account view
+@login_required
 def delete_account(request):
-    return render(request, 'accounts/delete_account.html')
+    """
+    Allows users to delete their entire account, including the associated profile
+    """
+    user = request.user
+
+    if request.method == "POST":
+        # Delete the user's profile (if it exists)
+        UserProfile.objects.filter(user=user).delete()
+
+        # Delete the user's account
+        user.delete
+
+        # Log the user out after deleting thier account
+        logout(request)
+
+        messages.success(request, "Your account has been permanently deleted.")
+        return redirect("home")
+    
+    return render(request, 'delete_account.html')
 
 # Home view
 @login_required
