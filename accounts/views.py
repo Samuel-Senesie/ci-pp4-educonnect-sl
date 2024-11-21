@@ -463,10 +463,12 @@ def delete_account(request):
 
     if request.method == "POST":
         # Delete the user's profile (if it exists)
-        UserProfile.objects.filter(user=user).delete()
+        user_profile = UserProfile.objects.filter(user=user).first()
+        if user_profile:
+            user_profile.delete()
 
         # Delete the user's account
-        user.delete
+        user.delete()
 
         # Log the user out after deleting thier account
         logout(request)
