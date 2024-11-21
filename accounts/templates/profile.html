@@ -16,7 +16,7 @@
             {% endif %}
 
             <!-- Form for background image upload -->
-            <form method="POST" action="{% url 'accounts:edit_profile' request.user.id %}" enctype="multipart/form-data" class="d-inline">
+            <form method="POST" action="{% url 'accounts:profile' %}" enctype="multipart/form-data" class="d-inline">
                 {% csrf_token %}
                 <input type="file" id="backgroundImageInput" name="background_image" class="d-none" onchange="this.form.submit();">
                 <label for="backgroundImageInput" class="edit-background-btn" aria-label="Edit Background Image">
@@ -34,7 +34,7 @@
             {% endif %}
 
             <!-- Form for profile picture upload -->
-            <form method="POST" action="{% url 'accounts:edit_profile' request.user.id %}" enctype="multipart/form-data" class="d-inline">
+            <form method="POST" action="{% url 'accounts:profile' %}" enctype="multipart/form-data" class="d-inline">
                 {% csrf_token %}
                 <input type="file" id="profileImageInput" name="profile_picture" class="d-none" onchange="this.form.submit();">
                 <label for="profileImageInput" class="edit-profile-pic-btn" aria-label=" Edit Profile Picture">
@@ -61,7 +61,7 @@
             <a href="{% url 'accounts:edit_profile' user_id=request.user.id %}" class="btn edit-profile-btn">Edit Profile</a>  
 
             <!-- Back Button -->
-            <a href="{% url role_redirect_url %}" class="btn btn-seconday back-btn mt-3">Back</a>
+            <a href="{% url role_redirect_url %}" class="btn btn-secondary back-btn mt-3">Back</a>
         </div>
     </div>
 

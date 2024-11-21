@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -158,9 +158,9 @@ class UserProfile(models.Model):
     """
     Profile model that handle and store additional user information.
     """
-    profile_id = models.AutoField(primary_key=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    bio = models.TextField(_('bio'), max_length=500, blank=True, null=True)
+    profile_id = models.AutoField(primary_key=True)
+    bio = models.TextField(_('bio'), max_length=300, blank=True, null=True)
     profile_picture = models.ImageField(
         _('profile picture'), 
         default='profile_pics/default_profile_pic.jpeg', 
@@ -181,17 +181,33 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        if self.profile_picture:
-            self.resize_image(self.background_image.path, max_size=(300, 300))
+        # Ensure default profile picture is set if missing 
+        if not self.profile_picture or not self.profile_picture.storage.exists(self.profile_picture.name):
+            self.profile_picture = 'profile_pics/default_profile_pic.jpeg'
+            super().save(*args, **kwargs)
         
-        if self.background_image:
-            self.resize_image(self.background_image.path, max_size=(1200, 400))
+        # Ensure default profile picture is set if missing 
+        if not self.background_image or not self.background_image.storage.exists(self.background_image.name):
+            self.background_image = 'background_images/default_background_image.jpeg'
+            super().save(*args, **kwargs)
+
+        # Resize profile picture
+        if self.profile_picture and self.profile_picture.name != 'profile_pics/default_profile_pic.jpg':
+            self.resize_image(self.profile_picture.path, max_size=(300, 300))
+        
+        # Resize background image
+        if self.background_image and self.background_image.name != 'background_images/default_background_image.jpg':
+            self.resize_image(self.background_image.path, max_size=(1200, 600))
+
     @staticmethod
     def resize_image(image_path, max_size):
         """ Resize image to max and overright original file."""
-        with Image.open(image_path) as img:
-            img.thumbnail(max_size)
-            img.save(image_path, format='JPEG', quality=90)
+        try:    
+            with Image.open(image_path) as img:
+                img.thumbnail(max_size, Image.Resampling.LANCZOS)
+                img.save(image_path, format='JPEG', quality=95)
+        except FileNotFoundError:
+            print(f"File not found: {image_path}")
 
     def __str__(self):
         return f'{self.user.get_full_name() or self.user.username} - {self.location or "Location not provided"} (UserProfile)'

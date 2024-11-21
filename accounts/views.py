@@ -29,6 +29,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.shortcuts import redirect
 from .forms import validate_and_resize_image
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__) #Debug
 
@@ -123,31 +125,58 @@ def profile(request):
     """
     View for logged-in user's profile.
     """
-    try: 
-        user_profile = get_object_or_404(UserProfile, user=request.user)
-    except UserProfile.DoesNotExist:
-        logger.errors("User profile does not found for the current user.")
-        messages.error(request, "Profile not found.")
-        return redirect("accounts:edit_profile", user_id=request.user.id)
+    #try: 
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    #except UserProfile.DoesNotExist:
+    #    logger.errors("User profile does not found for the current user.")
+    #    messages.error(request, "Profile not found.")
+    #    return redirect("accounts:edit_profile", user_id=request.user.id)
+    
+    # Ensure default profile_picture is set is profile picture is missing
+    if not user_profile.profile_picture or not user_profile.profile_picture.storage.exists(user_profile.profile_picture.name):
+        user_profile.profile_picture = 'profile_pics/default_profile_pic.jpeg'
+        user_profile.save()
+    
+    # # Ensure default background is set is profile picture is missing
+    if not user_profile.background_image or not user_profile.background_image.storage.exists(user_profile.background_image.name):
+        user_profile.background_image = 'background_images/default_background_image.jpeg'
+        user_profile.save()
+
 
     if request.method == 'POST':
-        # Handle profile picture and background image updates
-        profile_form = UserProfileEditForm(request.POST, request.FILES, isinstance=user_profile)
-        if profile_form.is_valid():
-            profile_form.save()
-            messages.success(request, 'Profile updated successfully!')
+        # Handle profile picture and background image upload
+        #profile_form = UserProfileEditForm(request.POST, request.FILES, isinstance=user_profile)
+        #if profile_form.is_valid():
+        #    profile_form.save()
+        #    messages.success(request, 'Profile updated successfully!')
+
+        # Handle profile picture upload
+        if 'profile_picture' in request.FILES:
+            user_profile.profile_picture = request.FILES['profile_picture']
+            user_profile.save()
+            messages.success(request, 'Profile picture updated successfully!')
+            return redirect('accounts:profile')
+        
+        # Handle background image upload
+        elif 'background_image' in request.FILES:
+            user_profile.background_image = request.FILES['background_image']
+            user_profile.save()
+            messages.success(request, 'Background image updated successfully!')
+            return redirect('accounts:profile')
+        else:
+            messages.error(request, 'No valid image upload found.')
 
             # Redirect users to their role-based views
-            if request.user.user_role == "Parent":
-                return redirect("accounts:parent_portal")
-            elif request.user.user_role == "Teacher":
-                return redirect("accounts:teacher_portal")
-            else:
-                return redirect ('home')
-        else:
-            messages.error(request, "Error updating profile image.")
-    else:
-        profile_form = UserProfileEditForm(instance=user_profile)
+    #        if request.user.user_role == "Parent":
+    #            return redirect("accounts:parent_portal")
+    #        elif request.user.user_role == "Teacher":
+    #            return redirect("accounts:teacher_portal")
+    #        else:
+    #            return redirect ('home')
+    #    else:
+    #        messages.error(request, "Error updating profile image.")
+    #else:
+    #    profile_form = UserProfileEditForm(instance=user_profile)
     
     role_redirect_url = "home"
     if request.user.user_role == "Parent":
@@ -157,7 +186,7 @@ def profile(request):
 
     return render(request, 'profile.html', {
         'profile': user_profile,
-        'profile_form': profile_form,
+        #'profile_form': profile_form,
         'role_redirect_url': role_redirect_url,
     })
 

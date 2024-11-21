@@ -197,3 +197,31 @@ window.onclick = (event) => {
     if (event.target === modal) modal.style.display = "home"
 };
 
+// Dynamically uplaod profile images using AJAX 
+//function uploadImage(formId) {
+//    const form = document.getElementById(formId)
+//    const formData = new FormData(form);
+
+//   fetch(window.location.href, {
+//        method: "POST",
+//        body: formData,
+//        headers: {
+//            "X-Requested-With": "XMLHttpRequest",
+//            "X-CSRFToken": form.querySelector("input[name=csrfmiddlewaretoken]").value
+//        }
+//    })
+//    .then(response => {
+//        if (response.ok){
+//            return response.json();
+//        }
+//        throw new Error("Failed to upload image")
+//    })
+
+//    .then(data => {
+//        if (data.message) {
+//            alert(data.message);
+//            window.location.reload();
+//        }
+//    })
+//    .catch(error => console.error("Error uploading image:", error));
+//}

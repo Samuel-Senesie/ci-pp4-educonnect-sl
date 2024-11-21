@@ -150,8 +150,8 @@ class ProfileEditForm(forms.ModelForm):
             return validate_and_resize_image(profile_picture, max_dimensions=(300, 300))
         return profile_picture
     
-    def cleaned_background_image(self):
-        background_image = self.clean_data.get('background_image')
+    def clean_background_image(self):
+        background_image = self.cleaned_data.get('background_image')
         if background_image:
             return validate_and_resize_image(background_image, max_dimensions=(1024, 512))
         return background_image
@@ -282,7 +282,7 @@ class UserProfileForm(forms.ModelForm):
             return validate_and_resize_image(profile_picture, max_dimensions=(300, 300))
         return profile_picture
     
-    def cleaned_background_image(self):
+    def clean_background_image(self):
         background_image = self.cleaned_data.get('background_image')
         if background_image:
             return validate_and_resize_image(background_image, max_dimensions=(1024, 512))
