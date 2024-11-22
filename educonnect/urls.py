@@ -33,6 +33,7 @@ urlpatterns = [
     #path('accounts/', include('accounts.urls', namespace='accounts')),
     path('accounts/', include('accounts.urls')),
     
+    
 ]
 
 if settings.DEBUG:

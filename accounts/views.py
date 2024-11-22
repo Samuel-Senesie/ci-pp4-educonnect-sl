@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.crypto import get_random_string
-from .models import UserProfile, CustomUser
+from .models import User, UserProfile, CustomUser
 from .forms import CustomUserCreationForm, CustomLoginForm, UserProfileForm, ProfileEditForm, UserProfileEditForm, CustomUserEditForm
 from datetime import date, time, datetime
 from django.views.decorators.csrf import csrf_protect
@@ -504,8 +504,10 @@ def contact(request):
 
 # Password reset
 def password_reset(request):
+    print("Custom password_reset view is called")
     if request.method == "POST":
         identifier = request.POST.get("identifier")
+        print(f"Identifier recieved: {identifier}")
         user = None
 
         # Check if identifier is an email or a phone number
@@ -514,19 +516,19 @@ def password_reset(request):
             if user:
                 # Send password reset email
                 reset_link = request.build_absoulute_uri(
-                    reverse("accounts:password_reset_verify", args=[user.pk])
+                    reverse("accounts:password_reset_verify") # , args=[user.pk]
                 )
                 send_mail(
                     "Password Reset Request",
                     f"Click the link to reset your password: {reset_link}",
                     "no-reply@yourdomain.com",
-                    [user.email]
+                    [user.email],
                 )
                 messages.success(request, "Password reset link has been sent to your email.")
-                return redirect("accounts:login")
+                return redirect("accounts:password_rest_verify")
             else:
                 messages.error(request, "No account found with that email.")
-        else:
+        else:  # Phone reset
             user = User.objects.filter(phone_number=identifier).first()
             if user:
                 # Generate and display verification code in the app
@@ -538,7 +540,7 @@ def password_reset(request):
             else:
                 messages.error(request, "No account found with that phone number.")
     
-    return render(request, "accounts/password_reset.html")
+    return render(request, "password_reset.html")
 
 
 def password_reset_verify(request):
@@ -546,6 +548,11 @@ def password_reset_verify(request):
         identifier = request.POST.get("identifier")
         verification_code = request.POST.get("code")
         new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password != confirm_password:
+            messages.error(request, "Password do not match. Please try again")
+            return redirect("accounts:password_reset_verify")
 
         user = User.objects.filter(phone_number=identifier, verification_code=verification_code).first()
         if user:
@@ -553,7 +560,38 @@ def password_reset_verify(request):
             user.verification_code = None   # Clear verification code after use
             user.save()
             messages.success(request, "Your password has been reset successfully.")
-            return redirect("accounts:login")
+            return redirect("accounts:login_view")
         else:
             messages.error(request, "Invalid verification code or identifier.")
-    return render(request, "accounts/password_reset_verify.html")
+    return render(request, "password_reset_verify.html")
+
+# Change Password View
+@login_required
+def change_password(request):
+    """
+    Allows logged-in user to change their password.
+    """
+    if request.method == "POST":
+        current_password = request.POST.get("current_password")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password != confirm_password:
+            messages.error(request, "New passwords do not match.")
+            return redirect("accounts:change_password")
+        
+        user = request.user
+        if not user.check_password(current_password):
+            messages.error(request, "Your current password is incorrect.")
+            return redirect("accounts:change_password")
+        
+        user.set_password(new_password)
+        user.save()
+
+        # Keep the user logged in after chnaging the password
+        update_session_auth_hash(request, user)
+
+        messages_success(request, "Your password has been updated successfully.")
+        return redirect("accounts:profile")
+    return render(request, "accounts/change_password.html")
+    
