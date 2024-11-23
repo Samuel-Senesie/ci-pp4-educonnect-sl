@@ -3,12 +3,44 @@
 {% block title %}School Registration{% endblock %}
 
 {% block content %}
-<form method="POST" action="{% url 'school:register' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <!--<div>
-        {{ form.name.label_tag }} {{ form.name }}
-    </div>-->
-    <button type="submit">Submit</button>
-</form>
+<div class="school-registration-container">
+    <h2 class="school-registration-title">Register Your School</h2>
+    <form method="POST" action="{% url 'school:register' %}" class="school-registration-form">
+        {% csrf_token %}
+        {% for field in form %}
+            {% if field.name != "preferred_time_from" and field.name != "preferred_time_to" %}
+                <div class="form-group">
+                    <label for="{{field.id_for_label }}">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span class="required-symbol">*</span>
+                    {% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="form-error">{{ field.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+            <!-- Check if the current field is preferrerd_time_from or preferred_time_to for styling purpose -->
+            <div class="form-group preferred-time-row">
+                <label>Preferred Time(Optional):</label>
+                <div class="time-fields">
+                    <div class="time-field">
+                        {{ form.preferred_time_from.label_tag }}
+                        {{ form.preferred_time_from }}
+                    </div>
+        
+                    <div class="time-field">
+                        {{ form.preferred_time_to.label_tag }}
+                        {{ form.preferred_time_to }}
+                    </div>
+                </div>
+            </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary school-submit-btn">Submit</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

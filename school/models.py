@@ -34,6 +34,35 @@ class School(models.Model):
         ("Mixed", "Mixed"),
     ]
 
+    DISTRICT_CHOICES = [
+        ("", "Select your district"),
+        ("WAU", "Western Area Urban"),
+        ("WAR", "Western Area Rural"),
+        ("SOB", "BO"),
+        ("SBTH", "Bonthe"),
+        ("SMOY", "moyamba"),
+        ("SUP", "Pujehun"),
+        ("EKE", "Kenema"),
+        ("EKO", "Kono"),
+        ("EKA", "Kailahun"),
+        ("NBO", "Bombali"),
+        ("NTO", "Tonkolili"),
+        ("NKO", "Koinadugu"),
+        ("NFA", "Falaba"),
+        ("NWKAM", "Kambia"),
+        ("NWKAR", "Karene"),
+        ("NWP", "Portloko"),
+    ]
+
+    REGION_CHOICES = [
+        ("", "Select your region"),
+        ("WA", "Western Area"),
+        ("NW", "North-West Region"),
+        ("NR", "Northern Region"),
+        ("SR", "Southern Region"),
+        ("ER", "Eastern Region"),  
+    ]
+
     school_id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -61,8 +90,10 @@ class School(models.Model):
     home_address = models.CharField(max_length=255, null=True, blank=True)
     chiefdom = models.CharField(max_length=100, null=True, blank=True)
     town = models.CharField(max_length=100, null=True, blank=True)
-    district = models.CharField(max_length=100, null=True, blank=True)
-    region = models.CharField(max_length=100, null=True, blank=True)
+    district = models.CharField(
+        max_length=100, choices=DISTRICT_CHOICES, null=True, blank=True)
+    region = models.CharField(
+        max_length=100, choices=REGION_CHOICES, default="", null=True, blank=True)
 
     # Admin Information
     admin_first_name = models.CharField(max_length=100)
@@ -85,6 +116,7 @@ class School(models.Model):
         verbose_name = "School"
         verbose_name_plural = "Schools"
     
+    # Save method for generating slugs
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)

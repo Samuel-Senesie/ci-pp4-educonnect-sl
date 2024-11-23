@@ -5,8 +5,9 @@
 ## Bugs
 
 ## Fixed Bugs
-| **Bug** | **Identified Issues** | **Fix**|
-| ------- | --------------------- | ------ |
+| **Bug**       | **Identified Issues** | **Fix**|
+| ------------- | --------------------- | ------ |
+| Users were unable to successfully log in from the signup page of the home page. Upon submitting valid credentials, users were redirected to the main home page instead of being logged in and redirected to thier designated view. | The form on the home page's signup section was incorrently pointing to the accounts.login URL instead of the correct accounts:login_view URL. This caused the log in attempt to fail and redirect users to the main login page. | Upon the form's action attrebuted in the home page template: Changed the URL from: {% url 'account:login' %} to: {% url 'account:login_view' %}. This ensures that the form correctly directs login requests to the appropiate login handler(CustomLoginView) for processing. |
 | User abale to log in after account deletion | Ther user.delete() method was not beign called due to missing parentheses (user.delete was used instead of user.delete()). As a result, the associacted UserProfile was not deleted causing RelatedObjectDoseNotExist error. | Ensured the user.delete() was called correctly to delete the account. Modified the delete_account logic to delete the UserProfile explicitly before deleting the user. Cleaned the orphaned profiles from the database to avoid related object errors. |
 
 ## Credits

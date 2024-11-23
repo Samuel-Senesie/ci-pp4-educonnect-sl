@@ -1,12 +1,84 @@
 {% extends 'base.html' %}
 
-{% block title %}Review Your School Details{% endblock %}
+{% block title %}Review School Registration Information{% endblock %}
 
 {% block content %}
-<ul>
-    <li>School: {{school_data.name }}</li>
-    <li>Education Level: {{school_data.education_level }}</li>
-    <li>Owner: {{school_data.owner }}</li>
-</ul>
-<form action=""></form>
+<div class="school-review-container">
+    <h2 class="school-review-title">Review Your Information</h2>
+    <form method="POST" action="{% url 'school:review' %}">
+        {% csrf_token %}
+        <table class="school-review-table">
+            <tr>
+                <td><b>School Name:</b></td>
+                <td>{{ school_data.name }}</td>
+            </tr>
+            <tr>
+                <td><b>Education Level:</b></td>
+                <td>{{ school_data.education_level }}</td>
+            </tr>
+            <tr>
+                <td><b>Ownership:</b></td>
+                <td>{{ school_data.owner }}</td>
+            </tr>
+            <tr>
+                <td><b>Approval Status:</b></td>
+                <td>{{ school_data.approval_status }}</td>
+            </tr>
+            <tr>
+                <td><b>Single or Mixed Sex:</b></td>
+                <td>{{ school_data.email_or_phone }}</td>
+            </tr>
+            <tr>
+                <td><b>Home Address:</b></td>
+                <td>{{ school_data.home_address }}</td>
+            </tr>
+            <tr>
+                <td><b>Town/Village:</b></td>
+                <td>{{ school_data.town }}</td>
+            </tr>
+            <tr>
+                <td><b>Chiefdom:</b></td>
+                <td>{{ school_data.chiefdom }}</td>
+            </tr>
+            <tr>
+                <td><b>District:</b></td>
+                <td>{{ school_data.district }}</td>
+            </tr>
+            <tr>
+                <td><b>Region:</b></td>
+                <td>{{ school_data.region }}</td>
+            </tr>
+            <tr>
+                <td><b>Admin First Name:</b></td>
+                <td>{{ school_data.admin_first_name }}</td>
+            </tr>
+            <tr>
+                <td><b>Admin Last Name:</b></td>
+                <td>{{ school_data.admin_last_name }}</td>
+            </tr>
+            <tr>
+                <td><b>Preferred Means of Communication:</b></td>
+                <td>
+                    {% if school_data.preferred_means_of_communication == 'sms' %}
+                        SMS
+                    {% elif school_data.preferred_means_of_communication == 'email' %}
+                        Email
+                    {% elif school_data.preferred_means_of_communication == 'whatsapp' %}
+                        WhatsApp
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><b>Preferred Time:</b></td>
+                <td>{{ school_data.preferred_time_from }} to {{ school_data.preferred_time_to }}</td>
+            </tr>
+        </table>
+        <div class="school-review-button-container" style="display: flex; justify-content: space-between;">
+            <a href="{% url 'school:register' %}" class="btn btn-secondary school-edit-btn">Edit Enteries</a>
+            <button type="submit" class="btn btn-primary school-confirm-btn">Confirm</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

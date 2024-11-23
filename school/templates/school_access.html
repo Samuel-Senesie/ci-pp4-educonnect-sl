@@ -1,30 +1,64 @@
 {% extends 'base.html' %}
 
+{% block title %}School Access{% endblock %}
+
 
 {% block content %}
-<div class="school-portal-container">
-    <p>Please enter your school information to proceed</p>
-    <form method="POST" action="{% url 'school:school_access' %}">
+<div class="school-access-container">
+    <h3 class="school-access-title">Access Your School Portal</h3>
+    <p class="school-access-instructions">Please enter your school information to proceed</p>
+    <form method="POST" action="{% url 'school:school_access' %}" class="school-access-form">
         {% csrf_token %}
+
+        <!-- School ID Field -->
         <div class="form-group">
-            {{ form.school_id.label_tag }}
-            {{form.school_id }}
+            <label for="{{ form.school_id.id_for_label }}">
+                {{ form.school_id.label }}
+                <span class="required-symbol">*</span>
+            </label>
+            {{ form.school_id }}
+            {% if form.school_id.errors %}
+                <div class="form-error">{{ form.school_id.errors|join:", " }}</div>
+            {% endif %}
         </div>
+
+        <!-- Full Name Field -->
         <div class="form-group">
-            {{ form.full_name.label_tag }}
+            <label for="{{ form.full_name.id_for_label }}">
+                {{ form.full_name.label }}
+                <span class="required-symbol">*</span>
+            </label>
             {{ form.full_name }}
+            {% if form.full_name.errors %}
+                <div class="form-error">{{ form.full_name.errors|join:", "}}</div>
+            {% endif %}
         </div>
-        <div class="form-group">
-            {{ form.password.label_tag }}
-            {{ form.password }}
+
+        <!-- Password Field with Toggle -->
+        <div class="form-group school-password-field">
+            <label for="{{ form.password.id_for_label }}">
+                {{ form.password.label }}
+                <span class="required-symbol">*</span>
+            </label>
+            <div class="school-password-input-container">
+                {{ form.password }}
+                <button type="button" class="school-password-toggle" onclick="togglePasswordVisibility(event)" aria-label="Toggle Password Visibility">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                </button>
+            </div>
+            {% if form.password.errors %}
+                <div class="form-error">{{ from.password.errors|join:", "}}</div>
+            {% endif %}
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Continue</button>
         </div>
     </form>
-    <div class="register-school">
-        <p>Don't have a School ID? <a href="{% url 'school:register' %}"> Register School</a> or contact your School Administrator</p>
+    <div class="school-register-cta">
+        <p>Don't have a School ID? 
+            <a href="{% url 'school:register' %}" class="school-register-link"> Register School</a> 
+            or contact your School Administrator.
+        </p>
     </div>
-
 </div>
 {% endblock %}

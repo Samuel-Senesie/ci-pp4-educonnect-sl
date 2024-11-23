@@ -5,7 +5,6 @@ from django.contrib import messages
 
 
 
-
 # Create your views here.
 
 def school_registration(request):
@@ -29,7 +28,7 @@ def school_review(request):
         school = School.objects.create(**school_data)
         del request.session['school_data'] # Clear session data
         return redirect('school:portal', school_id=school.school_id)
-    return render(request, 'school/school_review.html', {'school_data': school_data})
+    return render(request, 'school_review.html', {'school_data': school_data})
 
 def school_portal(request, school_id):
     school = get_object_or_404(School, school_id=school_id)

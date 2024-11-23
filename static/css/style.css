@@ -245,7 +245,7 @@ body {
 }
 
 .hero-image {
-    height: 200px;
+    height: 300px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -257,6 +257,11 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .welcome-title {
@@ -277,6 +282,7 @@ body {
 .features-title {
     padding: 0;
     list-style: none;
+    margin: 0;
 }
 
 .features-item {
@@ -318,11 +324,26 @@ body {
     margin: 0 auto;
 }
 
+.or-divider {
+    text-align: center;
+    font-size: 1rem;
+    color: #fff;
+    margin: 20px 0;
+}
+
+.login-section {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #003366;
+}
+
+
 .sign-in-box {
     background-color: #003366;
     color: white;
     padding: 20px;
     border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .sign-in-title {
@@ -374,7 +395,6 @@ body {
 }
 
 /* Signup Page */
-
 .signup-container {
     max-width: 600px;
     margin: 0 auto;
@@ -660,12 +680,6 @@ body {
 .signup-edit-btn:hover {
     background-color: #e53935;
     opacity: 0.9;
-}
-
-.or-divider {
-    font-size: 1rem;
-    color: #ffffff;
-    font-weight: 700;
 }
 
 .create-account-button {
@@ -1246,6 +1260,343 @@ body {
     font-size: 40px;
     margin-bottom: 10px;
 }
+
+/* School access portal */ 
+.school-access-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.school-access-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #003366;
+    font-weight: bold;
+}
+
+.school-access-instructions {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.school-access-form .form-group{
+    margin-bottom: 20px;
+}
+
+.school-access-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.school-access-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.school-access-form input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.school-register-cta {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0,95rem;
+    color: #555;
+}
+
+.school-register-link:hover {
+    text-decoration: underline;
+}
+
+.school-password-input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.school-password-input-container input{
+    flex: 1;
+    padding-right: 40px;
+}
+
+.school-password-toggle {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 5px;
+}
+
+.school-password-toggle i {
+    font-size: 1.2rem;
+    color: #555;
+}
+.school-password-toggle:hover i {
+    color: #333;
+}
+
+/* School Registration Page */
+
+.school-registration-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.school-registration-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #003366;
+    font-weight: bold;
+}
+
+.school-registration-form .form-group {
+    margin-bottom: 15px;
+}
+
+.school-registration-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.school-registration-form input,
+.school-registration-form select,
+.school-registration-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.school-registration-form input:focus,
+.school-registration-form select:focus,
+.school-registration-form textarea:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.form-error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.school-submit-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.school-submit-btn:hover {
+    background-color: #388e3c
+}
+
+.preferred-time-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    align-items: center;
+}
+
+.preferred-time-row label {
+    font-weight: bold;
+    margin-top: 20px;
+    white-space: nowrap;
+}
+
+.time-fields {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.time-field {
+    flex: 1;
+}
+
+.time-field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="time"] {
+    width: 100%;
+    max-width: 100px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+} 
+
+.required-symbol {
+    color: red;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-left: 2px;
+}
+
+.form-error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* School Review Page */
+.school-review-container {
+    max-width: 800px;
+    margin: 1.25rem auto;
+    padding: 1.25;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+.school-review-title {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #003366;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    margin: 10px;
+}
+
+.school-review-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.25rem;
+}
+
+.school-review-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    font-size: 1rem;
+}
+
+.school-review-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.school-review-table td:first-child {
+    font-weight: bold;
+    color: #333;
+    width: 50%;
+}
+
+.school-review-button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    gap: 10px;
+}
+
+.school-edit-btn {
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-end;
+    margin: 15px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.school-edit-btn:hover {
+    background-color: #d32f2f;
+}
+
+.school-confirm-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    margin: 15px;
+}
+
+.school-confirm-btn:hover {
+    background-color: #388e3c;
+}
+
+
+/** Signup review page **/
+
+.signup-confirm-btn {
+    background-color: #4CAF50;
+    align-self: flex-end;
+}
+
+.signup-edit-btn {
+    background-color: #f44336;
+    align-self: flex-start;
+}
+
+.signup-confirm-btn:hover {
+    background-color: #45a049;
+    opacity: 0.9;
+
+}
+
+.signup-edit-btn:hover {
+    background-color: #e53935;
+    opacity: 0.9;
+}
+
+/*    Test     */
+
 
 
 /* Footer section */

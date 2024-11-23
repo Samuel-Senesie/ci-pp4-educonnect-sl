@@ -2,6 +2,28 @@ from django import forms
 from .models import School
 
 class SchoolRegistrationForm(forms.ModelForm):
+    name = forms.CharField(
+        label="School Name",
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the school name'}),
+    )
+    preferred_means_of_communication = forms.ChoiceField(
+        choices=[('SMS', 'SMS'), ("WhatsApp", "WhatsApp"), ("Email", "Email")],
+        required=False,
+        label="Preferred Means of Communication (Optional)"
+    )
+    preferred_time_from = forms.TimeField(
+        required=False,
+        widget=forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+        label="From",  
+    )
+
+    preferred_time_to = forms.TimeField(
+        required=False,
+        widget=forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+        label="To",  
+    )
+
     class Meta:
         model = School
         fields = [
