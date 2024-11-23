@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Review Your School Details{% endblock %}
+
+{% block content %}
+<ul>
+    <li>School: {{school_data.name }}</li>
+    <li>Education Level: {{school_data.education_level }}</li>
+    <li>Owner: {{school_data.owner }}</li>
+</ul>
+<form action=""></form>
+{% endblock %}

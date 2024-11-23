@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="school-portal-container">
+    <p>Please enter your school information to proceed</p>
+    <form method="POST" action="{% url 'school:school_access' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.school_id.label_tag }}
+            {{form.school_id }}
+        </div>
+        <div class="form-group">
+            {{ form.full_name.label_tag }}
+            {{ form.full_name }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Continue</button>
+        </div>
+    </form>
+    <div class="register-school">
+        <p>Don't have a School ID? <a href="{% url 'school:register' %}"> Register School</a> or contact your School Administrator</p>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
 <div class="school-portal-container">
-    <h2 class="school-portile-title">
+    <h2 class="parent-portal-title">{{ school.name }} Portal</h2>
         <div class="school-portal-grid">
             <a href="#" class="school-portal-card school-add-child"><i class="fa fa-user-plus"></i>
                 <span>Add/Manage Teacher</span>
@@ -28,6 +29,5 @@
                 <span>Manage Appointments</span>
             </a>
         </div>
-    </h2>
 </div>
 {% endblock %}

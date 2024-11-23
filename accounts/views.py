@@ -322,8 +322,8 @@ class CustomLoginView(LoginView):
             logger.info(f"Redirecting {user.username} to the teacher portal")
             return redirect('accounts:teacher_portal')
         elif user.user_role == 'Administrator':
-            logger.info(f"Redirecting {user.username} to the administrator portal")
-            return redirec('accounts:administrator_portal')
+            logger.info(f"Redirecting {user.username} to the school access portal.")
+            return redirect('school:school_access')
         elif user.user_role == 'Police':
             logger.info(f"Redirecting {user.username} to the police portal")
             return redirect('accounts:police_portal')
@@ -337,6 +337,13 @@ class CustomLoginView(LoginView):
         print("Form errors:", form.errors)
         logger.warning("Form invalid. Login attempt failed due to invalid credentials.")
         return super().form_invalid(form)
+    
+    def get_success_url(self):
+        user = self.request.user
+        if user.is_authenticated:
+            return self.role_based_redirect(user).url
+        else:
+            return super().get_success_url()
  
 
 # Logout view
